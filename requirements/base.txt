@@ -1,0 +1,12 @@
+PyQt6>=6.4.0
+PyQt6-WebEngine>=6.4.0
+vosk>=0.3.45
+pyttsx3>=2.90
+numpy>=1.24.0
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+cryptography>=41.0.7
+psutil>=5.9.6
+sounddevice>=0.4.6
+soundfile>=0.12.1
+requests>=2.31.0

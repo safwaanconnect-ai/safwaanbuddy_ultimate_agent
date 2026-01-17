@@ -1,0 +1,7 @@
+# Build requirements for creating executable
+# Install with: pip install -r requirements/build.txt
+
+pyinstaller>=6.0.0
+setuptools>=68.0.0
+wheel>=0.41.0
+pip>=23.0.0

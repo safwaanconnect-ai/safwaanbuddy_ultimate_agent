@@ -1,0 +1,42 @@
+name: personal
+description: Personal profile for form filling
+created_at: '2024-01-01T00:00:00'
+updated_at: '2024-01-01T00:00:00'
+
+# Personal Information
+first_name: John
+last_name: Doe
+full_name: John Doe
+email: john.doe@example.com
+phone: "+1-555-0123"
+mobile: "+1-555-0123"
+date_of_birth: '1990-01-01'
+age: '34'
+
+# Address
+address: 123 Main Street
+address2: Apt 4B
+city: New York
+state: NY
+zip: '10001'
+country: United States
+
+# Professional
+occupation: Software Developer
+company: Tech Corp
+job_title: Senior Developer
+years_experience: '10'
+
+# Social
+linkedin: https://linkedin.com/in/johndoe
+twitter: '@johndoe'
+github: github.com/johndoe
+
+# Emergency Contact
+emergency_contact_name: Jane Doe
+emergency_contact_phone: "+1-555-0124"
+emergency_contact_relation: Spouse
+
+# Preferences
+preferred_language: English
+timezone: America/New_York

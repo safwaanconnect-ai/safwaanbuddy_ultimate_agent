@@ -1,0 +1,14 @@
+include README.md
+include LICENSE
+include requirements.txt
+include .env.example
+
+recursive-include src/safwaanbuddy *.py
+recursive-include config *.yaml
+recursive-include data/profiles *.yaml
+recursive-include data/templates *.yaml
+recursive-include assets *
+
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .DS_Store

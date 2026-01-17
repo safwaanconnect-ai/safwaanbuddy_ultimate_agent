@@ -1,0 +1,66 @@
+app:
+  name: "SafwaanBuddy Ultimate++"
+  version: "7.0.0"
+  debug: false
+
+voice:
+  enabled: true
+  wake_word: "hey safwan"
+  languages:
+    - en-US
+    - hi-IN
+    - en-IN
+  default_language: "en-US"
+  model_dir: "data/models/vosk"
+  confidence_threshold: 0.7
+
+tts:
+  enabled: true
+  rate: 150
+  volume: 0.9
+  voice_id: null
+
+gui:
+  theme: "dark"
+  width: 1200
+  height: 800
+  opacity: 0.95
+  overlay_color: "#00ffff"
+  animation_speed: 1.0
+
+automation:
+  typing_delay_min: 0.05
+  typing_delay_max: 0.15
+  click_delay: 0.5
+  ocr_confidence: 0.6
+  screenshot_quality: 85
+
+browser:
+  default: "chrome"
+  headless: false
+  window_size:
+    - 1920
+    - 1080
+  timeout: 30
+
+search:
+  default_engine: "google"
+  max_results: 10
+
+profiles:
+  data_dir: "data/profiles"
+  default_profile: "personal"
+
+plugins:
+  dir: "src/safwaanbuddy/plugins"
+  enabled: []
+
+security:
+  encryption_enabled: true
+  key_file: "data/.key"
+
+logging:
+  level: "INFO"
+  dir: "logs"
+  max_size_mb: 10
+  backup_count: 5

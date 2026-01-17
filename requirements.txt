@@ -1,0 +1,6 @@
+-r requirements/base.txt
+-r requirements/ui.txt
+-r requirements/voice.txt
+-r requirements/web.txt
+-r requirements/documents.txt
+-r requirements/automation.txt

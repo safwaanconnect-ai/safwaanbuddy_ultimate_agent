@@ -1,0 +1,43 @@
+name: "Standard Report Template"
+description: "Template for generating standard reports"
+type: "word"
+
+structure:
+  - type: "heading"
+    level: 1
+    content: "{title}"
+  
+  - type: "paragraph"
+    content: "Date: {date}"
+  
+  - type: "paragraph"
+    content: "Author: {author}"
+  
+  - type: "heading"
+    level: 2
+    content: "Executive Summary"
+  
+  - type: "paragraph"
+    content: "{summary}"
+  
+  - type: "heading"
+    level: 2
+    content: "Details"
+  
+  - type: "paragraph"
+    content: "{details}"
+  
+  - type: "heading"
+    level: 2
+    content: "Conclusion"
+  
+  - type: "paragraph"
+    content: "{conclusion}"
+
+variables:
+  title: "Report Title"
+  date: "2024-01-01"
+  author: "John Doe"
+  summary: "This is the executive summary..."
+  details: "Detailed information goes here..."
+  conclusion: "Conclusion and recommendations..."

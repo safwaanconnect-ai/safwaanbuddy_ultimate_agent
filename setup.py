@@ -32,7 +32,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "safwanbuddy=run_safwaan_buddy:main",
+            "safwanbuddy=main:main",
         ],
     },
 )

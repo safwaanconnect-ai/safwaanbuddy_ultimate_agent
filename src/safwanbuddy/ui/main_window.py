@@ -4,6 +4,7 @@ from src.safwanbuddy.ui.holographic_ui import HolographicUI
 from src.safwanbuddy.ui.voice_visualizer import VoiceVisualizer
 from src.safwanbuddy.ui.overlay_manager import OverlayManager
 from src.safwanbuddy.core.events import event_bus
+from src.safwanbuddy.core.logging import logger
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -50,6 +51,17 @@ class MainWindow(QMainWindow):
         event_bus.subscribe("system_log", self.add_message)
         event_bus.subscribe("show_targets", self.overlay.show_targets)
         event_bus.subscribe("target_selected", self.handle_target_selected)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key.Key_F12:
+            logger.warning("EMERGENCY KILL SWITCH ACTIVATED!")
+            self.add_message("Emergency stop triggered.")
+            event_bus.emit("emergency_stop")
+        elif event.modifiers() == Qt.KeyboardModifier.ControlModifier and event.key() == Qt.Key.Key_C:
+            logger.info("Interrupting current workflow...")
+            event_bus.emit("interrupt_workflow")
+        else:
+            super().keyPressEvent(event)
 
     def handle_target_selected(self, target):
         x, y, w, h = target

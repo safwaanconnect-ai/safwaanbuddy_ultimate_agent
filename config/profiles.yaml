@@ -1,0 +1,18 @@
+profiles:
+  - id: personal_1
+    name: Personal
+    type: personal
+    full_name: Safwan Buddy
+    email: safwan@example.com
+    phone: "+1234567890"
+    address: "123 Main Street"
+    city: Hyderabad
+    country: India
+    zip_code: "500001"
+  - id: professional_1
+    name: Professional
+    type: professional
+    full_name: Safwan Buddy
+    email: safwan.work@example.com
+    company: AI Corp
+    title: Senior Automation Engineer

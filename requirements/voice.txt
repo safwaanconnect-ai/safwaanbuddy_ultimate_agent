@@ -1,0 +1,5 @@
+# Voice requirements
+vosk
+pyttsx3
+sounddevice
+pyaudio

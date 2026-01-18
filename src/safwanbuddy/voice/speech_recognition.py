@@ -30,6 +30,7 @@ class VoiceRecognizer:
             return
 
         self.is_listening = True
+        event_bus.emit("system_state", "listening")
         with sd.RawInputStream(samplerate=16000, blocksize=8000, dtype='int16',
                                channels=1, callback=self.callback):
             while self.is_listening:
@@ -45,3 +46,4 @@ class VoiceRecognizer:
 
     def stop_listening(self):
         self.is_listening = False
+        event_bus.emit("system_state", "idle")

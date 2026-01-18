@@ -7,6 +7,8 @@ from src.safwanbuddy.profiles.profile_manager import profile_manager
 
 class TypeSystem:
     def type_text(self, text: str, human_like: bool = True):
+        from src.safwanbuddy.core.events import event_bus
+        event_bus.emit("system_log", f"Typing: {text}")
         if human_like:
             for char in text:
                 pyautogui.write(char)

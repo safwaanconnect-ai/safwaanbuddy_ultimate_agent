@@ -28,7 +28,8 @@ setup(
         "cryptography",
         "pyautogui",
         "keyboard",
-        "mouse"
+        "mouse",
+        "pyinstaller"
     ],
     entry_points={
         "console_scripts": [

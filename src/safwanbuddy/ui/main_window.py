@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QTextEdit, QLineEdit, QPushButton, QHBoxLayout
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon
+import os
 from src.safwanbuddy.ui.holographic_ui import HolographicUI
 from src.safwanbuddy.ui.voice_visualizer import VoiceVisualizer
 from src.safwanbuddy.ui.overlay_manager import OverlayManager
@@ -11,6 +13,9 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("SafwanBuddy Ultimate++ v7.0")
         self.resize(1000, 700)
+        icon_path = "assets/icons/app.ico"
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
         
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
@@ -51,6 +56,14 @@ class MainWindow(QMainWindow):
         event_bus.subscribe("system_log", self.add_message)
         event_bus.subscribe("show_targets", self.overlay.show_targets)
         event_bus.subscribe("target_selected", self.handle_target_selected)
+        event_bus.subscribe("system_state", self.update_system_state)
+        event_bus.subscribe("task_completed", lambda res: self.add_message(f"Task complete: {res}"))
+        event_bus.subscribe("task_failed", lambda err: self.add_message(f"Task failed: {err}"))
+        event_bus.subscribe("notification", self.overlay.show_notification)
+
+    def update_system_state(self, state):
+        self.visualizer.state = state
+        self.add_message(f"System state: {state}")
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_F12:

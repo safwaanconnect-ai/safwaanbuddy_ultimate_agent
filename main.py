@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QApplication
 from src.safwanbuddy.ui.main_window import MainWindow
 from src.safwanbuddy.core.logging import logger
 from src.safwanbuddy.core.plugin_loader import plugin_loader
+from src.safwanbuddy.core.orchestrator import orchestrator
 
 def run_test():
     logger.info("Running diagnostic suite...")
@@ -42,6 +43,9 @@ def main():
     # Load plugins
     plugin_loader.load_plugins()
     
+    # Start Orchestrator
+    orchestrator.start()
+    
     if args.headless:
         print("Running in headless mode. Type 'quit' to exit.")
         # Headless loop could go here
@@ -49,6 +53,7 @@ def main():
 
     # Start UI
     app = QApplication(sys.argv)
+    app.aboutToQuit.connect(orchestrator.stop)
     window = MainWindow()
     window.show()
     

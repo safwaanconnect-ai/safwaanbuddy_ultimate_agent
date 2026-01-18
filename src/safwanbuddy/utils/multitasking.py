@@ -8,6 +8,7 @@ class MultitaskingEngine:
         self.futures = []
 
     def submit_task(self, func, *args, **kwargs):
+        event_bus.emit("task_submitted")
         future = self.executor.submit(func, *args, **kwargs)
         future.add_done_callback(self._task_done_callback)
         self.futures.append(future)

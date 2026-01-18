@@ -1,34 +1,51 @@
 # SafwanBuddy Ultimate++ v7.0
 
-SafwanBuddy is a comprehensive AI-powered automation assistant for Windows. It features voice control, web automation, document generation, and a modular plugin architecture.
+## Human-Digital Symbiosis System
 
-## Features
-- **Voice Recognition**: Offline speech-to-text using Vosk.
-- **Holographic UI**: Modern PyQt6 interface with ModernGL animations.
-- **Smart Automation**: OCR-based clicking and human-like typing.
-- **Web Control**: Browser automation via Selenium.
-- **Document Suite**: Generate Word, Excel, and PDF files.
-- **Plugin System**: Easily extend functionality with custom Python scripts.
-- **Security**: Encrypted storage for sensitive user data.
+**Version:** 7.0 Ultimate  
+**Author:** AI Development Team  
+**License:** MIT License  
 
-## Installation
+---
 
-1. Install Python 3.9+
-2. Install Tesseract OCR on your system.
-3. Run `install.bat` to install dependencies.
-4. Download Vosk models to `assets/models/`.
+## 1. Overview
 
-## Usage
+### 1.1 What is SafwanBuddy?
 
-Run `run.bat` or `python run_safwaan_buddy.py`.
-Say "Hey Safwan" to wake up the assistant.
+SafwanBuddy Ultimate++ is a comprehensive human-digital symbiosis system designed to serve as an intelligent automation assistant. It integrates multiple advanced technologies including voice artificial intelligence, computer vision, web automation, document generation, social media management, and holographic user interfaces into a unified platform.
 
-## Project Structure
-- `src/safwanbuddy/`: Source code
-- `config/`: Configuration files
-- `plugins/`: User-defined plugins
-- `data/`: Profiles and encrypted storage
-- `assets/`: UI resources, models, and shaders
+## 2. Key Features
 
-## Development
-To add a plugin, create a new `.py` file in the `plugins/` directory inheriting from `PluginBase`.
+- **Multilingual Voice AI**: Offline speech recognition using Vosk models (EN, HI, Hyderabadi).
+- **Smart Typing System**: Intelligent text entry draws upon user profiles.
+- **Form-Fill Profiles**: Structured user information for automated form filling.
+- **Multi-Target Selection**: Choose between multiple matching elements on screen.
+- **Holographic User Interface**: ModernGL-based visual layer with animated graphics.
+- **Workflow Automation**: Record and replay sequences of actions.
+- **Web Automation**: Selenium-based browser control.
+- **Document Generation**: Create Word, Excel, PowerPoint, and PDF files.
+- **Computer Vision and OCR**: Screen capture and optical character recognition.
+
+## 3. System Architecture
+
+SafwanBuddy follows a modular, event-driven architecture. Subsystems communicate via a central event bus.
+
+### Directory Structure
+
+```
+SafwanBuddy/
+├── src/safwanbuddy/
+│   ├── app.py                   # Application entry point
+│   ├── cli.py                   # Command-line interface
+│   ├── core/                    # Core system modules
+│   ├── ui/                      # User interface modules
+│   ├── automation/              # Automation modules
+│   ├── voice/                   # Voice AI modules
+│   ├── web/                     # Web automation modules
+│   ├── documents/               # Document generation
+│   ├── vision/                  # Computer vision modules
+│   └── profiles/                # Profile management
+├── config/                      # Configuration files
+├── assets/                      # Static assets
+└── data/                        # Runtime data
+```

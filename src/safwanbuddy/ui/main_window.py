@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QTextEdit, QLineEdit, QPushButton, QHBoxLayout
 from PyQt6.QtCore import Qt
-from src.safwanbuddy.gui.holographic_ui import HolographicUI
-from src.safwanbuddy.gui.voice_visualizer import VoiceVisualizer
+from src.safwanbuddy.ui.holographic_ui import HolographicUI
+from src.safwanbuddy.ui.voice_visualizer import VoiceVisualizer
+from src.safwanbuddy.ui.overlay_manager import OverlayManager
 from src.safwanbuddy.core.events import event_bus
 
 class MainWindow(QMainWindow):
@@ -21,6 +22,9 @@ class MainWindow(QMainWindow):
         # Holographic Background
         self.holo_bg = HolographicUI()
         self.layout.addWidget(self.holo_bg, stretch=1)
+        
+        # Overlay Manager
+        self.overlay = OverlayManager()
         
         # Chat Display
         self.chat_display = QTextEdit()
@@ -44,6 +48,16 @@ class MainWindow(QMainWindow):
         # Subscribe to events
         event_bus.subscribe("voice_command", self.add_message)
         event_bus.subscribe("system_log", self.add_message)
+        event_bus.subscribe("show_targets", self.overlay.show_targets)
+        event_bus.subscribe("target_selected", self.handle_target_selected)
+
+    def handle_target_selected(self, target):
+        x, y, w, h = target
+        center_x = x + w // 2
+        center_y = y + h // 2
+        import pyautogui
+        pyautogui.click(center_x, center_y)
+        self.add_message(f"Clicked target at {center_x}, {center_y}")
 
     def send_command(self):
         text = self.command_input.text()

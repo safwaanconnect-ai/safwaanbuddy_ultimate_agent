@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication
-from src.safwanbuddy.gui.main_window import MainWindow
+from src.safwanbuddy.ui.main_window import MainWindow
 from src.safwanbuddy.core.logging import logger
 from src.safwanbuddy.core.plugin_loader import plugin_loader
 

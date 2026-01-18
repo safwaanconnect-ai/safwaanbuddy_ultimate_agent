@@ -20,6 +20,7 @@ setup(
         "python-docx",
         "openpyxl",
         "reportlab",
+        "python-pptx",
         "pytesseract",
         "mss",
         "opencv-python",

@@ -1,0 +1,5 @@
+# Document requirements
+python-docx
+openpyxl
+reportlab
+pdfkit

@@ -1,0 +1,6 @@
+# Base requirements
+pyyaml
+python-dotenv
+cryptography
+numpy
+psutil

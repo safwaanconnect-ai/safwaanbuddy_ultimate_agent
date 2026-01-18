@@ -1,0 +1,7 @@
+# Vision requirements
+pytesseract
+mss
+opencv-python
+pyautogui
+keyboard
+mouse

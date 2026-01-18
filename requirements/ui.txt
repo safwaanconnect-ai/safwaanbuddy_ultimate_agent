@@ -1,0 +1,5 @@
+# UI requirements
+PyQt6
+PyOpenGL
+ModernGL
+Pillow

@@ -1,4 +1,5 @@
-from src.safwanbuddy.web import browser_controller, web_scraper
+from .browser_controller import browser_controller
+from .web_scraper import web_scraper
 from src.safwanbuddy.core import logger, event_bus
 
 class PriceComparison:

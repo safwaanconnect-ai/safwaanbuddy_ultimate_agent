@@ -6,7 +6,7 @@ from vosk import Model, KaldiRecognizer
 from src.safwanbuddy.core import event_bus, logger
 
 class VoiceRecognizer:
-    def __init__(self, model_path: str = "assets/models/vosk-model-small-en-us-0.15"):
+    def __init__(self, model_path: str = "data/models/vosk-model-small-en-us-0.15"):
         self.model_path = model_path
         self.model = None
         self.recognizer = None

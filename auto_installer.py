@@ -8,7 +8,7 @@ def install_dependencies():
 
 def setup_directories():
     directories = [
-        "config", "assets", "data", "logs", "plugins", "data/profiles", "assets/models"
+        "config", "assets", "data", "logs", "plugins", "data/profiles", "data/models"
     ]
     for d in directories:
         if not os.path.exists(d):

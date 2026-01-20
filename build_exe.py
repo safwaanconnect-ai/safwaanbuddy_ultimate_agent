@@ -14,7 +14,10 @@ def build():
 
     # Run pyinstaller
     try:
-        subprocess.check_call(["pyinstaller", "--noconfirm", "safwanbuddy.spec"])
+        if os.path.exists("safwanbuddy.spec"):
+            subprocess.check_call(["pyinstaller", "--noconfirm", "safwanbuddy.spec"])
+        else:
+            subprocess.check_call(["pyinstaller", "--noconfirm", "--onefile", "--name", "SafwanBuddy", "main.py"])
         print("Build successful! Check the 'dist' directory.")
     except subprocess.CalledProcessError as e:
         print(f"Build failed with error: {e}")

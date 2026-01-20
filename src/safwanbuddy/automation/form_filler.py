@@ -1,4 +1,5 @@
-from src.safwanbuddy.automation import click_system, type_system
+from .click_system import click_system
+from .type_system import type_system
 from src.safwanbuddy.core import event_bus, logger
 from src.safwanbuddy.vision import screen_capture, ocr_engine
 import time

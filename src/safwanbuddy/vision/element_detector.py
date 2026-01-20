@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from src.safwanbuddy.vision.ocr_engine import ocr_engine
+from .ocr_engine import ocr_engine
 
 class ElementDetector:
     def __init__(self):

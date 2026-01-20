@@ -1,5 +1,5 @@
 import openpyxl
-from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.core import logger
 
 class ExcelGenerator:
     def create_spreadsheet(self, data: list, save_path: str):

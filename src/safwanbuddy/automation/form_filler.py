@@ -1,9 +1,6 @@
-from src.safwanbuddy.automation.click_system import click_system
-from src.safwanbuddy.automation.type_system import type_system
-from src.safwanbuddy.core.logging import logger
-from src.safwanbuddy.core.events import event_bus
-from src.safwanbuddy.vision.screen_capture import screen_capture
-from src.safwanbuddy.vision.ocr_engine import ocr_engine
+from src.safwanbuddy.automation import click_system, type_system
+from src.safwanbuddy.core import event_bus, logger
+from src.safwanbuddy.vision import screen_capture, ocr_engine
 import time
 
 class FormFiller:
@@ -13,6 +10,7 @@ class FormFiller:
         self.current_field = None
         self.results = []
         event_bus.subscribe("target_selected", self._on_field_confirmed)
+        event_bus.subscribe("target_skipped", self._on_field_skipped)
 
     def fill_form(self, profile_data: dict, field_mapping: dict):
         """
@@ -91,6 +89,13 @@ class FormFiller:
         type_system.type_text(value)
         
         self.results.append(f"Filled {label}")
+        self._present_next_field()
+
+    def _on_field_skipped(self, _=None):
+        if not self.is_filling or not self.current_field:
+            return
+        
+        self.results.append(f"Skipped {self.current_field['label']}")
         self._present_next_field()
 
     def _finish_guided_fill(self):

@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.core import logger
 
 class BrowserController:
     def __init__(self, browser_type: str = "chrome"):

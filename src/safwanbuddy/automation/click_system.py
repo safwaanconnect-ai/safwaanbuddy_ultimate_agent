@@ -1,7 +1,6 @@
 import pyautogui
-from src.safwanbuddy.vision.ocr_engine import ocr_engine
-from src.safwanbuddy.vision.screen_capture import screen_capture
-from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.vision import ocr_engine, screen_capture
+from src.safwanbuddy.core import logger, event_bus
 
 class ClickSystem:
     def click_text(self, text: str, double_click: bool = False):

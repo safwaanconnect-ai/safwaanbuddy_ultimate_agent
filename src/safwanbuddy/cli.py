@@ -1,7 +1,6 @@
 import argparse
 import sys
-from src.safwanbuddy.core.events import event_bus
-from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.core import event_bus, logger
 
 def main():
     parser = argparse.ArgumentParser(description="SafwanBuddy Ultimate++ v7.0 CLI")

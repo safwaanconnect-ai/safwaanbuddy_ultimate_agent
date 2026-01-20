@@ -1,5 +1,5 @@
 from pptx import Presentation
-from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.core import logger
 
 class PowerPointGenerator:
     def create_presentation(self, title: str, slides_content: list, save_path: str):

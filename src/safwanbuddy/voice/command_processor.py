@@ -1,7 +1,5 @@
-from src.safwanbuddy.core.events import event_bus
-from src.safwanbuddy.core.logging import logger
-from src.safwanbuddy.voice.text_to_speech import tts_manager
-from src.safwanbuddy.voice.language_manager import language_manager
+from src.safwanbuddy.core import event_bus, logger
+from src.safwanbuddy.voice import tts_manager, language_manager
 
 class CommandProcessor:
     def __init__(self):
@@ -60,6 +58,9 @@ class CommandProcessor:
         elif "run workflow" in command:
             name = command.split("run workflow")[-1].strip()
             event_bus.emit("automation_request", {"action": "run_workflow", "name": name})
+        elif "compare price" in command:
+            product = command.split("compare price")[-1].strip()
+            event_bus.emit("web_request", {"action": "compare_price", "product": product})
         elif "generate" in command and "report" in command:
             event_bus.emit("document_request", {"action": "generate_report"})
         else:

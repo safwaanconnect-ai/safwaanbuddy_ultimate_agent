@@ -1,6 +1,6 @@
 import os
 import shutil
-from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.core import logger
 
 class TemplateManager:
     def __init__(self, template_dir: str = "data/templates"):

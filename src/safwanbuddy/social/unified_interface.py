@@ -1,5 +1,5 @@
-from src.safwanbuddy.core.logging import logger
-from src.safwanbuddy.voice.text_to_speech import tts_manager
+from src.safwanbuddy.core import logger
+from src.safwanbuddy.voice import tts_manager
 
 class SocialIntegrator:
     def __init__(self):

@@ -1,6 +1,5 @@
 import psutil
-from src.safwanbuddy.core.logging import logger
-from src.safwanbuddy.core.events import event_bus
+from src.safwanbuddy.core import logger, event_bus
 
 class SystemMonitor:
     def __init__(self):

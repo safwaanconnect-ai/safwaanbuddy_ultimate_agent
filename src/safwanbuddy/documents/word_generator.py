@@ -1,5 +1,5 @@
 from docx import Document
-from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.core import logger
 
 class WordGenerator:
     def create_document(self, title: str, content: list, save_path: str):

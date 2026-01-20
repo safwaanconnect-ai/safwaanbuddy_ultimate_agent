@@ -5,8 +5,7 @@ import os
 from src.safwanbuddy.ui.holographic_ui import HolographicUI
 from src.safwanbuddy.ui.voice_visualizer import VoiceVisualizer
 from src.safwanbuddy.ui.overlay_manager import OverlayManager
-from src.safwanbuddy.core.events import event_bus
-from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.core import event_bus, logger
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -62,7 +61,7 @@ class MainWindow(QMainWindow):
         event_bus.subscribe("notification", self.overlay.show_notification)
 
     def update_system_state(self, state):
-        self.visualizer.state = state
+        self.visualizer.set_state(state)
         self.add_message(f"System state: {state}")
 
     def keyPressEvent(self, event):

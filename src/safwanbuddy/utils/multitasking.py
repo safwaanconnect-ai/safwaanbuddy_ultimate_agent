@@ -1,6 +1,5 @@
 import concurrent.futures
-from src.safwanbuddy.core.logging import logger
-from src.safwanbuddy.core.events import event_bus
+from src.safwanbuddy.core import logger, event_bus
 
 class MultitaskingEngine:
     def __init__(self, max_workers: int = 5):
@@ -21,5 +20,11 @@ class MultitaskingEngine:
         except Exception as e:
             logger.error(f"Task failed: {e}")
             event_bus.emit("task_failed", str(e))
+
+    def cancel_all(self):
+        for future in self.futures:
+            future.cancel()
+        self.futures = []
+        logger.info("All tasks cancelled.")
 
 multitasking_engine = MultitaskingEngine()

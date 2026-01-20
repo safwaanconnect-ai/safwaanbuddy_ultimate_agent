@@ -1,23 +1,32 @@
 import json
 import time
-from src.safwanbuddy.core.logging import logger
+import threading
+from src.safwanbuddy.core import logger, event_bus
 
 class WorkflowEngine:
     def __init__(self):
         self.workflows = {}
         self.is_recording = False
         self.recorded_steps = []
+        self._recording_thread = None
 
     def start_recording(self):
         self.is_recording = True
         self.recorded_steps = []
         logger.info("Started recording workflow.")
-        # In a real implementation, we would hook into keyboard/mouse events here
+        event_bus.emit("system_log", "Recording started...")
+        
+        # Start recording logic in a separate thread if needed
+        # In a real system, we would use keyboard and mouse hooks here
+        # For demonstration, we'll just set the flag
 
     def stop_recording(self, name: str):
+        if not self.is_recording:
+            return []
         self.is_recording = False
         self.workflows[name] = self.recorded_steps
         logger.info(f"Stopped recording workflow: {name}. Recorded {len(self.recorded_steps)} steps.")
+        event_bus.emit("system_log", f"Recording stopped. {len(self.recorded_steps)} steps.")
         return self.recorded_steps
 
     def add_step(self, step_type: str, **kwargs):

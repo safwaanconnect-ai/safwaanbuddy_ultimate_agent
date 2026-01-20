@@ -1,8 +1,5 @@
-from src.safwanbuddy.core.logging import logger
-from src.safwanbuddy.core.config import config_manager
-from src.safwanbuddy.core.events import event_bus
-from src.safwanbuddy.voice.speech_recognition import VoiceRecognizer
-from src.safwanbuddy.voice.command_processor import command_processor
+from src.safwanbuddy.core import logger, config_manager, event_bus
+from src.safwanbuddy.voice import VoiceRecognizer, command_processor
 
 class SafwanBuddyApp:
     def __init__(self):

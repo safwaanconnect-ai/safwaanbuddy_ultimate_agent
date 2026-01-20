@@ -3,8 +3,7 @@ import argparse
 from PyQt6.QtWidgets import QApplication
 from src.safwanbuddy.ui.main_window import MainWindow
 from src.safwanbuddy.core.logging import logger
-from src.safwanbuddy.core.plugin_loader import plugin_loader
-from src.safwanbuddy.core.orchestrator import orchestrator
+from src.safwanbuddy.core import plugin_loader, orchestrator
 
 def run_test():
     logger.info("Running diagnostic suite...")

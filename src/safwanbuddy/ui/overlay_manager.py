@@ -44,13 +44,17 @@ class OverlayManager(QWidget):
             painter.drawText(x, y - 5, str(i + 1))
 
     def keyPressEvent(self, event):
+        from src.safwanbuddy.core.events import event_bus
         if event.key() == Qt.Key.Key_Tab:
-            self.current_index = (self.current_index + 1) % len(self.targets)
-            self.update()
+            if len(self.targets) > 1:
+                self.current_index = (self.current_index + 1) % len(self.targets)
+                self.update()
+            else:
+                event_bus.emit("target_skipped")
+                self.hide()
         elif event.key() == Qt.Key.Key_Space:
             if 0 <= self.current_index < len(self.targets):
                 target = self.targets[self.current_index]
-                from src.safwanbuddy.core.events import event_bus
                 event_bus.emit("target_selected", target)
                 self.hide()
         elif event.key() == Qt.Key.Key_Escape:

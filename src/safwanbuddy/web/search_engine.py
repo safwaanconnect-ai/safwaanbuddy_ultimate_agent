@@ -1,4 +1,4 @@
-from src.safwanbuddy.web.browser_controller import browser_controller
+from src.safwanbuddy.web import browser_controller
 
 class SearchEngine:
     def __init__(self):

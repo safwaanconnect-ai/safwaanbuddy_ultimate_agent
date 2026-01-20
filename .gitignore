@@ -208,3 +208,6 @@ __marimo__/
 data/
 logs/
 assets/models/
+dist/
+build/
+*.spec

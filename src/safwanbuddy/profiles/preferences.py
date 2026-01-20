@@ -1,4 +1,4 @@
-from src.safwanbuddy.core.config import config_manager
+from src.safwanbuddy.core import config_manager
 
 class Preferences:
     def __init__(self):

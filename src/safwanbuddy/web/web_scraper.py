@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.core import logger
 
 class WebScraper:
     def __init__(self):

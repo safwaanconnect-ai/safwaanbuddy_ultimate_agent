@@ -16,8 +16,14 @@ class VoiceVisualizer(QWidget):
     def update_bars(self):
         if self.state == "listening":
             self.bars = [random.randint(10, 90) for _ in range(50)]
+        elif self.state == "processing":
+            self.bars = [random.randint(40, 60) for _ in range(50)]
         else:
             self.bars = [max(0, b - 5) for b in self.bars]
+        self.update()
+
+    def set_state(self, state):
+        self.state = state
         self.update()
 
     def paintEvent(self, event):

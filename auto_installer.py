@@ -18,7 +18,7 @@ def setup_directories():
 def main():
     setup_directories()
     install_dependencies()
-    print("Setup complete! You can now run SafwanBuddy using run_safwaan_buddy.py")
+    print("Setup complete! You can now run SafwanBuddy using main.py")
 
 if __name__ == "__main__":
     main()

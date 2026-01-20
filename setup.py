@@ -20,6 +20,7 @@ setup(
         "python-docx",
         "openpyxl",
         "reportlab",
+        "python-pptx",
         "pytesseract",
         "mss",
         "opencv-python",
@@ -27,11 +28,12 @@ setup(
         "cryptography",
         "pyautogui",
         "keyboard",
-        "mouse"
+        "mouse",
+        "pyinstaller"
     ],
     entry_points={
         "console_scripts": [
-            "safwanbuddy=run_safwaan_buddy:main",
+            "safwanbuddy=main:main",
         ],
     },
 )

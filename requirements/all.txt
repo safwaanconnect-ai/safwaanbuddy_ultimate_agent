@@ -1,0 +1,6 @@
+-r base.txt
+-r ui.txt
+-r voice.txt
+-r web.txt
+-r documents.txt
+-r vision.txt

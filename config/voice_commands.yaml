@@ -1,0 +1,10 @@
+commands:
+  "open browser": "open_browser"
+  "search for": "search"
+  "type my email": "type_email"
+  "fill this form": "fill_form"
+  "take a screenshot": "screenshot"
+  "generate report": "generate_report"
+  "list contacts": "list_contacts"
+  "stop listening": "stop_listening"
+  "goodbye": "exit"

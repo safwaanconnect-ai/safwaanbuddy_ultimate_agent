@@ -1,0 +1,6 @@
+pytest
+pytest-qt
+pre-commit
+mypy
+black
+flake8

@@ -6,6 +6,7 @@ class ConfigManager:
     def __init__(self, config_path: str = "config/settings.yaml"):
         self.config_path = config_path
         self.settings: Dict[str, Any] = {}
+        self.active_profile = None
         self.load_config()
 
     def load_config(self):
@@ -15,8 +16,7 @@ class ConfigManager:
         with open(self.config_path, 'r') as f:
             self.settings = yaml.safe_load(f) or {}
             
-        # Load overrides from environment variables if any
-        # e.g., SAFWANBUDDY_API_KEY
+        # Load overrides from environment variables
         for key, value in os.environ.items():
             if key.startswith("SAFWANBUDDY_"):
                 config_key = key.replace("SAFWANBUDDY_", "").lower()
@@ -28,19 +28,20 @@ class ConfigManager:
             "app": {
                 "name": "SafwanBuddy Ultimate++",
                 "version": "7.0",
-                "language": "en"
+                "run_mode": "interactive"
             },
             "voice": {
                 "engine": "vosk",
                 "wake_word": "hey safwan",
-                "languages": ["en", "hi", "hyderabadi"]
+                "language": "en"
             },
             "gui": {
                 "theme": "dark",
-                "accent_color": "#00ffff"
+                "opacity": 0.9,
+                "holographic_ui": True
             },
             "automation": {
-                "typing_speed": "medium",
+                "max_workers": 5,
                 "human_like": True
             }
         }
@@ -57,5 +58,26 @@ class ConfigManager:
             else:
                 return default
         return val
+
+    def get_config(self):
+        return self.settings
+
+    def set_config(self, key: str, value: Any):
+        keys = key.split('.')
+        d = self.settings
+        for k in keys[:-1]:
+            d = d.setdefault(k, {})
+        d[keys[-1]] = value
+
+    def save_config(self):
+        with open(self.config_path, 'w') as f:
+            yaml.dump(self.settings, f)
+
+    def get_profile(self, profile_id: str = None):
+        # This would load from profiles.yaml
+        return {"id": "default", "name": "Default Profile"}
+
+    def set_active_profile(self, profile_id: str):
+        self.active_profile = profile_id
 
 config_manager = ConfigManager()

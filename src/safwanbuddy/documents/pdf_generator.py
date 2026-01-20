@@ -1,5 +1,5 @@
 from reportlab.pdfgen import canvas
-from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.core import logger
 
 class PDFGenerator:
     def create_pdf(self, title: str, text: str, save_path: str):

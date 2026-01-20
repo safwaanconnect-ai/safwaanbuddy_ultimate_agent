@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QTextEdit, QLineE
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 import os
+from src.safwanbuddy.utils.helpers import get_resource_path
 from src.safwanbuddy.ui.holographic_ui import HolographicUI
 from src.safwanbuddy.ui.voice_visualizer import VoiceVisualizer
 from src.safwanbuddy.ui.overlay_manager import OverlayManager
@@ -12,7 +13,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("SafwanBuddy Ultimate++ v7.0")
         self.resize(1000, 700)
-        icon_path = "assets/icons/app.ico"
+        icon_path = get_resource_path("assets/icons/app.ico")
         if os.path.exists(icon_path):
             self.setWindowIcon(QIcon(icon_path))
         

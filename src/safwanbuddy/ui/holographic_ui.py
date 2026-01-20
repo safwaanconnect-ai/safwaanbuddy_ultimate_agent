@@ -3,6 +3,7 @@ from PyQt6.QtCore import QTimer
 import moderngl
 import numpy as np
 import os
+from src.safwanbuddy.utils.helpers import get_resource_path
 
 class HolographicUI(QOpenGLWidget):
     def __init__(self, parent=None):
@@ -18,8 +19,8 @@ class HolographicUI(QOpenGLWidget):
     def initializeGL(self):
         self.ctx = moderngl.create_context()
         
-        vert_path = "assets/shaders/grid.vert"
-        frag_path = "assets/shaders/grid.frag"
+        vert_path = get_resource_path("assets/shaders/grid.vert")
+        frag_path = get_resource_path("assets/shaders/grid.frag")
         
         # Fallback if files don't exist
         if os.path.exists(vert_path) and os.path.exists(frag_path):

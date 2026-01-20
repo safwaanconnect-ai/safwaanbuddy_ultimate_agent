@@ -1,5 +1,6 @@
 import sys
 import argparse
+import os
 from src.safwanbuddy.core.logging import logger
 from src.safwanbuddy.core import plugin_loader, orchestrator
 
@@ -46,6 +47,10 @@ def run_demo():
     logger.info("Demo complete.")
 
 def main():
+    # If running as a bundled executable, change working directory to exe location
+    if getattr(sys, 'frozen', False):
+        os.chdir(os.path.dirname(sys.executable))
+
     parser = argparse.ArgumentParser(description="SafwanBuddy Ultimate++ v7.0")
     parser.add_argument("--test", action="store_true", help="Run diagnostics")
     parser.add_argument("--demo", action="store_true", help="Run demonstration")

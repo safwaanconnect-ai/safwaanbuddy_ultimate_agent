@@ -5,3 +5,4 @@ cryptography
 numpy
 psutil
 pyinstaller
+pywin32; sys_platform == 'win32'

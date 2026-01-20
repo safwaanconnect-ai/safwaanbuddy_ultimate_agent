@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 from src.safwanbuddy.core.logging import logger
 
 class BrowserController:
@@ -12,11 +14,18 @@ class BrowserController:
         try:
             if self.browser_type == "chrome":
                 options = webdriver.ChromeOptions()
-                if headless:
-                    options.add_argument("--headless")
+                if headless: options.add_argument("--headless")
                 self.driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-                logger.info("Chrome browser launched successfully.")
-            # Add Firefox, Edge support here
+            elif self.browser_type == "edge":
+                options = webdriver.EdgeOptions()
+                if headless: options.add_argument("--headless")
+                self.driver = webdriver.Edge(service=webdriver.edge.service.Service(EdgeChromiumDriverManager().install()), options=options)
+            elif self.browser_type == "firefox":
+                options = webdriver.FirefoxOptions()
+                if headless: options.add_argument("--headless")
+                self.driver = webdriver.Firefox(service=webdriver.firefox.service.Service(GeckoDriverManager().install()), options=options)
+            
+            logger.info(f"{self.browser_type.capitalize()} browser launched successfully.")
         except Exception as e:
             logger.error(f"Failed to launch browser: {e}")
 

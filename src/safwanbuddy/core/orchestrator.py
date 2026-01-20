@@ -65,8 +65,11 @@ class SafwanBuddyOrchestrator:
         elif action == "fill_form":
             profile_id = config_manager.active_profile or "default"
             profile = profile_manager.load_profile(profile_id)
-            # Guided form filling logic would go here
-            logger.info("Starting form filling...")
+            if profile:
+                form_filler.start_guided_fill(profile)
+            else:
+                logger.warning("No profile loaded for form filling.")
+                event_bus.emit("notification", "No profile found.")
 
     def _handle_social(self, data):
         action = data.get("action")

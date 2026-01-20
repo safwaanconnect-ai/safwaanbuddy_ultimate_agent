@@ -48,7 +48,12 @@ def main():
     
     if args.headless:
         print("Running in headless mode. Type 'quit' to exit.")
-        # Headless loop could go here
+        while True:
+            cmd = input("SafwanBuddy> ")
+            if cmd.lower() in ["quit", "exit"]:
+                orchestrator.stop()
+                break
+            orchestrator.process_command(cmd)
         return
 
     # Start UI

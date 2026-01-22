@@ -51,6 +51,10 @@ def main():
     if getattr(sys, 'frozen', False):
         os.chdir(os.path.dirname(sys.executable))
 
+    # Ensure required directories exist
+    from auto_installer import setup_directories
+    setup_directories()
+
     parser = argparse.ArgumentParser(description="SafwanBuddy Ultimate++ v7.0")
     parser.add_argument("--test", action="store_true", help="Run diagnostics")
     parser.add_argument("--demo", action="store_true", help="Run demonstration")

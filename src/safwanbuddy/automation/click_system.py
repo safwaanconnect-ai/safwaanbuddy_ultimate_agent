@@ -20,12 +20,10 @@ class ClickSystem:
                 pyautogui.doubleClick(center_x, center_y)
             else:
                 pyautogui.click(center_x, center_y)
-            from src.safwanbuddy.core.events import event_bus
             event_bus.emit("system_log", f"Clicked: {text}")
             return True
         else:
             logger.info(f"Multiple matches found for '{text}'. Showing selection overlay.")
-            from src.safwanbuddy.core.events import event_bus
             # Simplify results to just (x, y, w, h)
             targets = [r[:4] for r in results]
             event_bus.emit("show_targets", targets)

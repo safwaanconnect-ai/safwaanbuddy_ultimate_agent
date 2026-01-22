@@ -1,17 +1,41 @@
 import sys
 import argparse
-from PyQt6.QtWidgets import QApplication
-from src.safwanbuddy.ui.main_window import MainWindow
+import os
 from src.safwanbuddy.core.logging import logger
 from src.safwanbuddy.core import plugin_loader, orchestrator
 
 def run_test():
     logger.info("Running diagnostic suite...")
-    # Add real diagnostic checks here
-    print("Configuration Loading: OK")
-    print("Event Bus Initialization: OK")
-    print("Subsystem Startup: OK")
-    logger.info("Diagnostics complete.")
+    try:
+        import yaml
+        print("YAML support: OK")
+        import PyQt6
+        print("PyQt6 support: OK")
+        import selenium
+        print("Selenium support: OK")
+        import cv2
+        print("OpenCV support: OK")
+        import pytesseract
+        print("Tesseract support: OK")
+        
+        from src.safwanbuddy.core.config import config_manager
+        print(f"Configuration Loading: OK (App Name: {config_manager.get('app.name')})")
+        
+        from src.safwanbuddy.core.events import event_bus
+        print("Event Bus Initialization: OK")
+        
+        from src.safwanbuddy.core.orchestrator import orchestrator
+        print("Orchestrator Initialization: OK")
+        
+        from src.safwanbuddy.profiles.profile_manager import profile_manager
+        profiles = profile_manager.list_profiles()
+        print(f"Profile Manager: OK (Found {len(profiles)} profiles)")
+        
+        logger.info("Diagnostics complete. Everything seems to be working perfectly!")
+    except Exception as e:
+        logger.error(f"Diagnostics failed: {e}")
+        print(f"DIAGNOSTIC FAILURE: {e}")
+        sys.exit(1)
 
 def run_demo():
     logger.info("Running demonstration sequence...")
@@ -23,6 +47,14 @@ def run_demo():
     logger.info("Demo complete.")
 
 def main():
+    # If running as a bundled executable, change working directory to exe location
+    if getattr(sys, 'frozen', False):
+        os.chdir(os.path.dirname(sys.executable))
+
+    # Ensure required directories exist
+    from auto_installer import setup_directories
+    setup_directories()
+
     parser = argparse.ArgumentParser(description="SafwanBuddy Ultimate++ v7.0")
     parser.add_argument("--test", action="store_true", help="Run diagnostics")
     parser.add_argument("--demo", action="store_true", help="Run demonstration")
@@ -56,12 +88,18 @@ def main():
         return
 
     # Start UI
-    app = QApplication(sys.argv)
-    app.aboutToQuit.connect(orchestrator.stop)
-    window = MainWindow()
-    window.show()
-    
-    sys.exit(app.exec())
+    try:
+        from PyQt6.QtWidgets import QApplication
+        from src.safwanbuddy.ui.main_window import MainWindow
+        app = QApplication(sys.argv)
+        app.aboutToQuit.connect(orchestrator.stop)
+        window = MainWindow()
+        window.show()
+        sys.exit(app.exec())
+    except ImportError:
+        logger.error("PyQt6 not installed. UI mode unavailable.")
+        print("Error: PyQt6 not installed. Use --headless to run in text-only mode.")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

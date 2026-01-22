@@ -286,9 +286,20 @@ profiles:
 
 Configure system settings in config/settings.yaml according to your preferences. Key settings include run_mode to control the default startup mode, voice_language to set the default speech recognition language, default_platform to specify the primary social media platform, and max_workers to control the number of parallel execution threads.
 
-### 4.4 Running the Application
+### 4.4 Building the Executable (Windows)
 
-The application can be started using the run.bat script on Windows, which activates the virtual environment and launches the application. Alternatively, run `python main.py` from the project directory with the virtual environment activated. Command-line arguments control the run mode and configuration.
+To create a standalone Windows 11 executable (.exe), follow these steps on a Windows machine:
+
+1.  Ensure you have Python 3.9+ installed and added to your PATH.
+2.  Open a terminal in the project root directory.
+3.  Run the build script: `python build_exe.py`
+4.  Once complete, the standalone executable `SafwanBuddy.exe` will be available in the `dist/` directory.
+
+**Note:** For the executable to function correctly, the `config/`, `data/`, and `plugins/` directories should be located in the same folder as the `.exe`. Assets are bundled internally.
+
+### 4.5 Running the Application
+
+The application can be started using the run.bat script on Windows, which activates the virtual environment and launches the application. Alternatively, run `python main.py` from the project directory with the virtual environment activated. For the standalone version, simply run `SafwanBuddy.exe`. Command-line arguments control the run mode and configuration.
 
 For interactive voice mode, run `python main.py` without arguments or with the `--mode interactive` flag. This starts all subsystems including the voice AI and holographic UI. For text-only mode, use `python main.py --headless` to disable voice and visual features. For testing and development, `python main.py --test` runs the diagnostic suite and `python main.py --demo` runs a demonstration sequence.
 

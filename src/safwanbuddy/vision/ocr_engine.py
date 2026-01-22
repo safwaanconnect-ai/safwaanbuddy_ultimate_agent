@@ -1,11 +1,23 @@
 import pytesseract
 import cv2
 import numpy as np
+import os
+import sys
 
 class OCREngine:
     def __init__(self, tesseract_cmd: str = None):
         if tesseract_cmd:
             pytesseract.pytesseract.tesseract_cmd = tesseract_cmd
+        elif sys.platform == 'win32':
+            # Common Tesseract installation paths on Windows
+            paths = [
+                r'C:\Program Files\Tesseract-OCR\tesseract.exe',
+                r'C:\Users\{}\AppData\Local\Tesseract-OCR\tesseract.exe'.format(os.getlogin()),
+            ]
+            for path in paths:
+                if os.path.exists(path):
+                    pytesseract.pytesseract.tesseract_cmd = path
+                    break
 
     def extract_text(self, image: np.ndarray) -> str:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

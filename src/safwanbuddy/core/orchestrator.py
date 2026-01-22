@@ -1,9 +1,9 @@
 from src.safwanbuddy.core.events import event_bus
 from src.safwanbuddy.core.logging import logger
 from src.safwanbuddy.automation import click_system, type_system, workflow_engine, form_filler
-from src.safwanbuddy.social.unified_interface import social_integrator
+from src.safwanbuddy.social import social_integrator
 from src.safwanbuddy.web import browser_controller, search_engine, price_comparison
-from src.safwanbuddy.documents.word_generator import word_generator
+from src.safwanbuddy.documents import word_generator
 from src.safwanbuddy.core.config import config_manager
 from src.safwanbuddy.profiles.profile_manager import profile_manager
 from src.safwanbuddy.voice import VoiceRecognizer

@@ -1,5 +1,6 @@
 from src.safwanbuddy.core import event_bus, logger
-from src.safwanbuddy.voice import tts_manager, language_manager
+from .text_to_speech import tts_manager
+from .language_manager import language_manager
 
 class CommandProcessor:
     def __init__(self):

@@ -207,7 +207,7 @@ marimo/_lsp/
 __marimo__/
 data/
 logs/
-assets/models/
+data/models/
 dist/
 build/
 *.spec

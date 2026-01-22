@@ -6,18 +6,30 @@ from vosk import Model, KaldiRecognizer
 from src.safwanbuddy.core import event_bus, logger
 
 class VoiceRecognizer:
-    def __init__(self, model_path: str = "assets/models/vosk-model-small-en-us-0.15"):
+    def __init__(self, model_path: str = "data/models/vosk-model-small-en-us-0.15"):
         self.model_path = model_path
         self.model = None
         self.recognizer = None
         self.audio_queue = queue.Queue()
         self.is_listening = False
 
-        if os.path.exists(model_path):
-            self.model = Model(model_path)
-            self.recognizer = KaldiRecognizer(self.model, 16000)
+        if not os.path.exists(self.model_path):
+            # Try to find any model in the data/models directory
+            models_dir = "data/models"
+            if os.path.exists(models_dir):
+                dirs = [d for d in os.listdir(models_dir) if os.path.isdir(os.path.join(models_dir, d))]
+                if dirs:
+                    self.model_path = os.path.join(models_dir, dirs[0])
+                    logger.info(f"Using alternative Vosk model found at {self.model_path}")
+
+        if os.path.exists(self.model_path):
+            try:
+                self.model = Model(self.model_path)
+                self.recognizer = KaldiRecognizer(self.model, 16000)
+            except Exception as e:
+                logger.error(f"Failed to load Vosk model: {e}")
         else:
-            logger.warning(f"Vosk model not found at {model_path}. Voice recognition will be disabled.")
+            logger.warning(f"Vosk model not found. Voice recognition will be disabled.")
 
     def callback(self, indata, frames, time, status):
         if status:

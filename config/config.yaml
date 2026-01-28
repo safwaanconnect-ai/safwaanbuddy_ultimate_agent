@@ -1,0 +1,146 @@
+# SafwanBuddy Ultimate++ v7.0 Configuration File
+# Main configuration for the JARVIS-style AI agent
+
+_metadata:
+  version: "7.0"
+  created: "2024-01-28"
+  environment: "production"
+
+# Application Settings
+app:
+  name: "SafwanBuddy Ultimate++"
+  version: "7.0"
+  debug: false
+  run_mode: "gui"  # gui, headless, demo
+  data_dir: "data"
+  config_dir: "config"
+  auto_start: false
+  profile_on_startup: "default"
+  check_updates: true
+
+# Voice Recognition Settings
+voice:
+  engine: "google"  # google, sphinx, pocketsphinx
+  language: "en-US"
+  wake_word: "hey safwan"
+  speech_rate: 200.0
+  speech_volume: 0.8
+  voice_id: "default"
+  auto_listen: true
+  noise_reduction: true
+  energy_threshold: 300.0
+  pause_threshold: 0.8
+  sample_rate: 16000
+  microphone_index: null
+
+# GUI Settings
+gui:
+  theme: "dark"  # dark, light, holographic
+  opacity: 0.95
+  window_width: 1400
+  window_height: 900
+  always_on_top: false
+  minimize_to_tray: true
+  show_waveform: true
+  show_system_stats: true
+  animation_speed: 1.0
+  holographic_effects: true
+  font_family: "Arial"
+  font_size: 12
+
+# Desktop Automation Settings
+automation:
+  max_workers: 5
+  human_like_delays: true
+  click_delay_range: [0.1, 0.5]
+  type_delay_range: [0.05, 0.15]
+  screenshot_quality: 90
+  ocr_language: "eng"
+  timeout_seconds: 30
+  retry_attempts: 3
+  screenshot_dir: "screenshots"
+  workflow_dir: "workflows"
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  file_enabled: true
+  file_path: "logs/safwanbuddy.log"
+  console_enabled: true
+  max_file_size: 10485760  # 10MB
+  backup_count: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  performance_logging: true
+  command_logging: true
+
+# API and Service Integration
+api:
+  openai_api_key: ""
+  google_api_key: ""
+  weather_api_key: ""
+  news_api_key: ""
+  custom_apis: {}
+
+# Profile Management
+profile:
+  active_profile: "default"
+  auto_save: true
+  profiles_dir: "profiles"
+  backup_profiles: true
+
+# System Settings
+system:
+  check_updates: true
+  update_interval: 86400  # 24 hours in seconds
+  performance_monitoring: true
+  auto_cleanup_logs: true
+  max_log_age_days: 30
+
+# Network and Connectivity
+network:
+  timeout: 30
+  retry_attempts: 3
+  user_agent: "SafwanBuddy/7.0"
+  proxy: null
+
+# Security Settings
+security:
+  encrypt_profiles: false
+  require_confirmation: true
+  safe_mode: false
+  log_actions: true
+
+# Custom Features
+custom:
+  startup_commands: []
+  custom_intents: {}
+  ui_layout: "default"
+  shortcuts:
+    toggle_mic: "Ctrl+Shift+M"
+    show_help: "F1"
+    quick_command: "Ctrl+Shift+Q"
+  theme_colors:
+    primary: "#00FFFF"
+    secondary: "#0066CC"
+    background: "#0a0a1a"
+    accent: "#00FF00"
+    warning: "#FFAA00"
+    error: "#FF4444"
+
+# Advanced Settings
+advanced:
+  parallel_processing: true
+  memory_limit: 1073741824  # 1GB in bytes
+  cpu_limit: 80  # Percentage
+  voice_cache_size: 100
+  max_concurrent_tasks: 10
+  enable_plugins: true
+  plugin_dir: "plugins"
+
+# Developer Settings
+developer:
+  debug_mode: false
+  verbose_logging: false
+  performance_profiling: false
+  mock_services: false
+  test_mode: false

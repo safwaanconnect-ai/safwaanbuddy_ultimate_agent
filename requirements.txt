@@ -1,6 +1,66 @@
--r requirements/base.txt
--r requirements/ui.txt
--r requirements/voice.txt
--r requirements/web.txt
--r requirements/documents.txt
--r requirements/vision.txt
+# GUI Framework
+PyQt6>=6.5.0
+PyQt6-Qt6>=6.5.0
+
+# Voice Recognition and Text-to-Speech
+SpeechRecognition>=3.10.0
+pyttsx3>=2.90
+pyaudio>=0.2.11
+
+# Desktop Automation
+pyautogui>=0.9.54
+pynput>=1.7.6
+keyboard>=0.13.5
+mouse>=0.7.1
+
+# Screen Capture and Image Processing
+pyscreenshot>=3.1
+opencv-python>=4.8.0
+numpy>=1.24.0
+pillow>=10.0.0
+pytesseract>=0.3.10
+
+# Configuration and Data
+PyYAML>=6.0
+pyaml>=23.7.0
+
+# HTTP Requests and Web Scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+selenium>=4.11.0
+
+# Date and Time Handling
+python-dateutil>=2.8.0
+
+# Text Processing and NLP
+nltk>=3.8.0
+fuzzywuzzy>=0.18.0
+python-Levenshtein>=0.21.0
+
+# File and Directory Operations
+pathlib2>=2.3.7
+
+# JSON and Data Serialization
+orjson>=3.9.0
+
+# Threading and Async
+threading-timer>=2.0.3
+
+# Database (SQLite for profiles)
+sqlite3
+
+# Logging Enhancement
+colorlog>=6.7.0
+
+# System Information
+psutil>=5.9.0
+
+# Audio Processing
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# Web Browser Automation
+webdriver-manager>=4.0.0
+
+# Environment Variables
+python-dotenv>=1.0.0

@@ -1,0 +1,123 @@
+# Default User Profile for SafwanBuddy
+# This profile contains sample user information for testing and demonstration
+
+id: "default"
+name: "Default User"
+created: "2024-01-28T00:00:00"
+modified: "2024-01-28T00:00:00"
+is_active: true
+
+# Personal Information
+personal:
+  first_name: "John"
+  last_name: "Doe"
+  full_name: "John Doe"
+  email: "john.doe@example.com"
+  phone: "555-123-4567"
+  mobile: "555-987-6543"
+  address: "123 Main Street"
+  city: "Anytown"
+  state: "CA"
+  zip_code: "12345"
+  country: "United States"
+  date_of_birth: "1990-01-01"
+  gender: "Male"
+  ssn: "123-45-6789"
+
+# Work Information
+work:
+  company: "Tech Solutions Inc."
+  job_title: "Software Engineer"
+  department: "Engineering"
+  work_email: "john.doe@techsolutions.com"
+  work_phone: "555-555-0123"
+  work_address: "456 Business Ave, Suite 100"
+  manager_name: "Jane Smith"
+  employee_id: "EMP12345"
+
+# Contact Information
+contact:
+  emergency_contact: "Jane Doe"
+  emergency_phone: "555-555-9876"
+  preferred_contact: "email"
+  timezone: "America/Los_Angeles"
+  language: "en"
+
+# Financial Information (Use with caution!)
+financial:
+  bank_name: "First National Bank"
+  account_number: "1234567890"
+  routing_number: "123456789"
+  credit_card_number: "4111-1111-1111-1111"
+  expiry_date: "12/25"
+  cvv: "123"
+
+# User Preferences
+preferences:
+  preferred_browser: "chrome"
+  default_language: "en"
+  email_signature: "Best regards,\nJohn Doe\nSoftware Engineer\nTech Solutions Inc."
+  auto_fill_enabled: true
+  voice_feedback: true
+  confirm_actions: true
+
+# Additional Metadata
+tags:
+  - "engineer"
+  - "tech-savvy"
+  - "demo-user"
+
+notes: |
+  This is a sample profile for demonstration purposes.
+  Please replace with actual user information.
+
+  The financial information above is dummy data for testing only.
+
+# Auto-fill Field Mappings
+# These can be used to map profile fields to specific website form fields
+auto_fill_fields:
+  # General fields
+  "firstName": "John"
+  "lastName": "Doe"
+  "fullName": "John Doe"
+  "email": "john.doe@example.com"
+  "phone": "555-123-4567"
+  "address": "123 Main Street"
+  "city": "Anytown"
+  "state": "CA"
+  "zipCode": "12345"
+  "country": "United States"
+  
+  # Work-related fields
+  "company": "Tech Solutions Inc."
+  "jobTitle": "Software Engineer"
+  "workEmail": "john.doe@techsolutions.com"
+  "workPhone": "555-555-0123"
+  
+  # Payment fields
+  "cardNumber": "4111111111111111"
+  "cardName": "John Doe"
+  "cardExpiry": "12/25"
+  "cardCvv": "123"
+  "billingAddress": "123 Main Street, Anytown, CA 12345"
+  
+  # Common form variations
+  "name": "John Doe"
+  "username": "johndoe"
+  "full_name": "John Doe"
+  "date_of_birth": "01/01/1990"
+  "ssn": "123456789"
+  
+  # Shipping fields
+  "shippingAddress": "123 Main Street"
+  "shippingCity": "Anytown"
+  "shippingState": "CA"
+  "shippingZip": "12345"
+  "shippingCountry": "United States"
+  
+  # Contact variations
+  "telephone": "555-123-4567"
+  "mobilePhone": "555-987-6543"
+  "contactEmail": "john.doe@example.com"
+  "emergencyName": "Jane Doe"
+  "emergencyPhone": "555-555-9876"

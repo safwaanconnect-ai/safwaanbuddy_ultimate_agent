@@ -11,6 +11,7 @@ class TaskPlanner:
         self.is_running = False
         self._current_task_thread = None
         self.history_file = os.path.join(os.getcwd(), "config", "expert_history.json")
+        self.shared_memory = {}
         self._ensure_config_dir()
 
     def _ensure_config_dir(self):
@@ -21,6 +22,7 @@ class TaskPlanner:
             logger.warning("Expert mode already running a task.")
             return
 
+        self.shared_memory = {"goal": goal, "start_time": time.time()}
         steps = self._decompose_goal(goal)
         if not steps:
             logger.error(f"Could not decompose goal: {goal}")
@@ -31,6 +33,21 @@ class TaskPlanner:
         self._current_task_thread = threading.Thread(target=self._execute_steps, args=(goal, steps))
         self._current_task_thread.start()
 
+    def _resolve_variables(self, data):
+        """Resolves variables in step data using shared memory."""
+        if isinstance(data, str):
+            # Find all {var} patterns
+            matches = re.findall(r"\{(.+?)\}", data)
+            for match in matches:
+                if match in self.shared_memory:
+                    data = data.replace(f"{{{match}}}", str(self.shared_memory[match]))
+            return data
+        elif isinstance(data, dict):
+            return {k: self._resolve_variables(v) for k, v in data.items()}
+        elif isinstance(data, list):
+            return [self._resolve_variables(v) for v in data]
+        return data
+
     def _decompose_goal(self, goal: str):
         goal = goal.lower()
         
@@ -38,32 +55,34 @@ class TaskPlanner:
         match = re.search(r"research (?:and|then) (?:report|broadcast|message) (?:about|on) (.+)", goal)
         if match:
             topic = match.group(1).strip()
+            self.shared_memory["topic"] = topic
             return [
-                {"type": "expert_event", "data": {"status": f"Initializing intelligence gathering on: {topic}"}},
-                {"type": "web_request", "data": {"action": "search", "query": topic}},
+                {"type": "expert_event", "data": {"status": "Initializing intelligence gathering on: {topic}"}},
+                {"type": "web_request", "data": {"action": "search", "query": "{topic}"}},
                 {"type": "wait", "data": 2},
                 {"type": "expert_event", "data": {"status": "Analyzing search results and extracting key data..."}},
-                {"type": "web_request", "data": {"action": "compare_price", "product": topic}}, # If applicable
+                {"type": "web_request", "data": {"action": "compare_price", "product": "{topic}"}},
                 {"type": "wait", "data": 3},
-                {"type": "document_request", "data": {"action": "generate_report", "topic": topic}},
+                {"type": "document_request", "data": {"action": "generate_report", "topic": "{topic}"}},
                 {"type": "expert_event", "data": {"status": "Synthesizing executive summary..."}},
-                {"type": "social_request", "data": {"action": "message", "name": "Admin", "message": f"Intelligence report on {topic} is complete and archived."}},
-                {"type": "notification", "data": f"Expert Mode: Mission Accomplished for {topic}"}
+                {"type": "social_request", "data": {"action": "message", "name": "Admin", "message": "Intelligence report on {topic} is complete and archived."}},
+                {"type": "notification", "data": "Expert Mode: Mission Accomplished for {topic}"}
             ]
 
         # 2. Automated Profile & Onboarding Chain
         match = re.search(r"setup profile (.+)", goal)
         if match:
             name = match.group(1).strip()
+            self.shared_memory["name"] = name
             return [
-                {"type": "expert_event", "data": {"status": f"Starting automated onboarding for {name}"}},
+                {"type": "expert_event", "data": {"status": "Starting automated onboarding for {name}"}},
                 {"type": "automation_request", "data": {"action": "open_browser"}},
                 {"type": "wait", "data": 1},
-                {"type": "automation_request", "data": {"action": "type_profile", "field": "full_name"}},
+                {"type": "automation_request", "data": {"action": "type_profile", "field": "full_name", "value": "{name}"}},
                 {"type": "automation_request", "data": {"action": "fill_form"}},
                 {"type": "expert_event", "data": {"status": "Verifying identity across systems..."}},
                 {"type": "wait", "data": 2},
-                {"type": "notification", "data": f"Profile {name} is now active."}
+                {"type": "notification", "data": "Profile {name} is now active."}
             ]
 
         # 3. Market Intelligence & Social Broadcast Chain
@@ -136,14 +155,21 @@ class TaskPlanner:
             for i, step in enumerate(steps):
                 if not self.is_running: break
                 
+                # Resolve variables before execution
+                resolved_data = self._resolve_variables(step["data"]) if "data" in step else None
+                
                 if step["type"] == "wait":
-                    time.sleep(step["data"])
+                    time.sleep(resolved_data)
                     continue
                 
                 logger.info(f"Expert Mode Step {i+1}/{len(steps)}: {step['type']}")
-                event_bus.emit(step["type"], step["data"])
+                event_bus.emit(step["type"], resolved_data)
                 
-                executed_steps.append({"step": step, "timestamp": time.time(), "status": "success"})
+                # Simulate capturing output to shared memory for some steps
+                if step["type"] == "web_request" and resolved_data.get("action") == "search":
+                    self.shared_memory["search_results"] = f"Top results for {resolved_data.get('query')}: [AI is evolving fast, ...]"
+                
+                executed_steps.append({"step": step, "resolved_data": resolved_data, "timestamp": time.time(), "status": "success"})
                 time.sleep(2)
             
             event_bus.emit("action_result", {"success": True, "message": "Autonomous task completed successfully."})

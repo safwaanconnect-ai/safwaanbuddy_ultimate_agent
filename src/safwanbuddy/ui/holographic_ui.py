@@ -23,7 +23,7 @@ class HolographicUI(QOpenGLWidget):
 
     def on_state_change(self, state):
         if state == "listening":
-            self.active_prog_name = "hologram"
+            self.active_prog_name = "energy_orb"
         elif state == "processing":
             self.active_prog_name = "particles"
         elif state == "processing_expert":
@@ -68,7 +68,7 @@ class HolographicUI(QOpenGLWidget):
     def initializeGL(self):
         self.ctx = moderngl.create_context()
         
-        for name in ["hologram", "particles", "grid", "energy_ring"]:
+        for name in ["hologram", "particles", "grid", "energy_ring", "energy_orb"]:
             try:
                 self.progs[name] = self.load_shader(name)
             except Exception as e:

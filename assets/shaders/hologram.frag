@@ -23,56 +23,44 @@ void main() {
     vec2 uv = gl_FragCoord.xy / resolution;
     vec2 centered_uv = uv - 0.5;
     
-    // Chromatic Aberration
-    float shift = 0.01 * audio_intensity;
-    float r_noise = noise(uv + vec2(shift, 0.0) + time * 0.1);
-    float b_noise = noise(uv - vec2(shift, 0.0) + time * 0.1);
+    // Enhanced Chromatic Aberration
+    float chrom_offset = 0.005 + 0.02 * audio_intensity;
+    float r = noise(uv + vec2(chrom_offset, 0.0) + time * 0.1);
+    float g = noise(uv + time * 0.1);
+    float b = noise(uv - vec2(chrom_offset, 0.0) + time * 0.1);
     
-    // Distort UVs based on audio and time
-    float distortion = noise(uv * 10.0 + time) * 0.02 * audio_intensity;
-    vec2 distorted_uv = uv + distortion;
+    // Scanline logic that reacts to audio
+    float scanline = sin(uv.y * 800.0 * (1.0 + audio_intensity * 0.1) + time * 10.0);
+    scanline = smoothstep(0.0, 1.0, scanline);
     
-    // Grid effect
-    vec2 grid_uv = distorted_uv * 40.0;
-    float grid = abs(sin(grid_uv.x + time * 0.2)) * abs(sin(grid_uv.y - time * 0.1));
-    grid = pow(grid, 0.05);
+    // Dynamic Grid
+    vec2 grid_uv = (uv - 0.5) * (20.0 + audio_intensity * 10.0);
+    float grid = abs(sin(grid_uv.x)) * abs(sin(grid_uv.y));
+    grid = pow(1.0 - grid, 10.0);
     
-    // Neon glow lines
-    float line = abs(sin(distorted_uv.y * 10.0 - time * 2.0));
-    line = smoothstep(0.98, 1.0, line);
+    // Holographic flicker
+    float flicker = noise(vec2(time * 10.0, 0.0));
+    flicker = step(0.1, flicker);
     
-    // FBM-like noise for holographic feel
-    float n = 0.0;
-    n += noise(distorted_uv * 5.0 + time * 0.5) * 0.5;
-    n += noise(distorted_uv * 10.0 - time * 0.3) * 0.25;
-    
-    // Color scheme: Premium Neon Cyan/Blue
+    // Main hologram color
     vec3 base_color = vec3(0.0, 0.8, 1.0);
-    vec3 color = base_color * grid * 0.5;
-    color += base_color * line * 0.5;
-    color += base_color * n * 0.2;
+    vec3 color = base_color * (grid * 0.2 + scanline * 0.1 + 0.4);
     
-    // Apply chromatic aberration to the final color
-    color.r += r_noise * shift;
-    color.b += b_noise * shift;
-    
-    // Audio reactivity Aura
-    float dist = length(centered_uv);
-    float aura = smoothstep(0.4, 0.0, dist) * audio_intensity;
-    color += base_color * aura * 0.5;
-    
-    // Scanning line
-    float scan = smoothstep(0.99, 1.0, sin(uv.y * 50.0 - time * 5.0));
-    color += vec3(1.0) * scan * 0.2;
+    // Apply Chromatic Aberration
+    color.r += r * chrom_offset * 10.0;
+    color.b += b * chrom_offset * 10.0;
     
     // Vignette
-    float vignette = 1.0 - length(centered_uv) * 1.5;
-    color *= vignette;
+    float vig = 1.0 - length(centered_uv) * 1.2;
+    color *= vig;
     
-    // Glitch effect
-    if (hash(vec2(time, time)) > 0.98) {
-        color.rg = mix(color.rg, vec2(hash(uv + time)), 0.2);
-    }
+    // Vertical "ghosting" or scanning bars
+    float bar = smoothstep(0.2, 0.0, abs(sin(uv.y * 2.0 + time) - 0.5));
+    color += base_color * bar * 0.1 * audio_intensity;
     
-    f_color = vec4(color, 0.7 + n * 0.3 + aura);
+    // Glitch
+    float glitch = step(0.98, hash(vec2(time, 1.0)));
+    color += glitch * vec3(hash(uv + time), hash(uv - time), hash(uv * time)) * 0.2;
+
+    f_color = vec4(color, (0.6 + 0.4 * audio_intensity) * flicker * vig);
 }

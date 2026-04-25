@@ -9,8 +9,8 @@ class OverlayManager(QWidget):
         
         self.layout = QVBoxLayout(self)
         self.label = QLabel("SafwanBuddy Active")
-        self.label.setStyleSheet("color: lime; font-weight: bold; font-size: 18px;")
-        self.layout.addWidget(self.label)
+        self.label.setStyleSheet("color: #00d4ff; font-weight: bold; font-size: 20px; background: rgba(0,0,0,100); padding: 10px; border-radius: 5px;")
+        self.layout.addWidget(self.label, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
         
         self.targets = []
         self.current_index = -1
@@ -18,7 +18,23 @@ class OverlayManager(QWidget):
         self.hide_timer = QTimer()
         self.hide_timer.timeout.connect(self.hide)
 
-    def show_notification(self, text: str, duration: int = 3000):
+        from src.safwanbuddy.core.events import event_bus
+        event_bus.subscribe("expert_event", self._on_expert_event)
+        event_bus.subscribe("action_result", self._on_action_result)
+
+    def _on_expert_event(self, data):
+        status = data.get("status", "Expert Mode Running...")
+        self.show_notification(f"EXPERT MODE: {status}")
+
+    def _on_action_result(self, result):
+        if isinstance(result, dict):
+            msg = result.get("message") or result.get("error")
+        else:
+            msg = str(result)
+        if msg:
+            self.show_notification(msg)
+
+    def show_notification(self, text: str, duration: int = 4000):
         self.label.setText(text)
         self.show()
         self.hide_timer.start(duration)

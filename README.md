@@ -22,7 +22,8 @@
 9. [API Reference](#9-api-reference)
 10. [Troubleshooting](#10-troubleshooting)
 11. [Development Guide](#11-development-guide)
-12. [Frequently Asked Questions](#12-frequently-asked-questions)
+12. [Autonomous Expert Mode](#212-autonomous-expert-mode)
+13. [Frequently Asked Questions](#13-frequently-asked-questions)
 
 ---
 
@@ -46,7 +47,12 @@ The system prioritizes user agency while providing intelligent suggestions and a
 
 SafwanBuddy is designed for a wide range of use cases across personal and professional contexts. In professional environments, the system excels at automating repetitive data entry tasks, managing email communications, conducting web research, creating reports and documents, and coordinating social media presence. The workflow recording and playback capabilities allow users to automate complex sequences of actions that would otherwise require significant time and attention.
 
-For personal use, SafwanBuddy provides convenient features for managing contacts, sending messages, organizing files, and automating personal workflows. The voice interface enables hands-free operation, which is particularly useful when the user is occupied with other tasks or prefers verbal communication. The smart typing system with profile management eliminates the tedium of repeatedly entering personal information into forms and applications.
+### 1.4 Visual Gallery
+
+| Holographic UI | Voice Visualization | Autonomous Expert Mode |
+|:---:|:---:|:---:|
+| ![Hologram](assets/icons/hologram_preview.png) | ![Visualizer](assets/icons/viz_preview.png) | ![Expert](assets/icons/expert_preview.png) |
+| Premium GLSL Shaders | Real-time Audio Spectrum | Complex Task Chaining |
 
 ---
 
@@ -88,7 +94,7 @@ The system maintains a history of all click actions, recording the target text, 
 
 The holographic user interface provides a ModernGL-based visual layer that enhances the user experience with animated graphics, real-time visualizations, and an aesthetically pleasing presentation of system status. The interface runs in a separate window that overlays the desktop, displaying information about current system state, voice activity, and pending actions.
 
-The holographic background features real vertex and fragment shaders that create flowing grid patterns, neon wave animations, and particle effects. These visual elements provide a sense of depth and sophistication while remaining performant on typical consumer hardware. The interface supports fullscreen or resizable window modes, adapting to the user's preference and available screen space.
+The holographic background features real vertex and fragment shaders that create flowing grid patterns, neon wave animations, chromatic aberration, and particle effects. New in v7.0 are the premium "energy ring" shaders used during expert mode and dynamic auras that react to audio intensity. These visual elements provide a sense of depth and sophistication while remaining performant on typical consumer hardware. The interface supports fullscreen or resizable window modes, adapting to the user's preference and available screen space.
 
 Real-time voice waveform visualization shows microphone input levels, changing color based on system state: blue for idle, green for listening, yellow for processing, and red for errors. The waveform display provides visual feedback that confirms the voice system is functioning and helps users adjust their speaking volume and clarity. The action feed panel provides a scrollable log of recent actions, including clicks, types, form fills, voice commands, and web automation activities.
 
@@ -139,6 +145,12 @@ The multitasking engine coordinates parallel task execution through a thread poo
 Task queuing with priority support ensures that important tasks execute before less urgent ones. The system maintains statistics about task execution including total tasks, running tasks, completed tasks, and cancelled tasks. Users can query task status, cancel running tasks, and review execution history through the command interface.
 
 The engine integrates with the event bus system to publish task lifecycle events, allowing other subsystems to react to task completion, failure, or cancellation. This integration enables complex workflows where multiple subsystems coordinate their activities through shared event notifications rather than direct coupling.
+
+### 2.12 Autonomous Expert Mode
+
+Autonomous Expert Mode is a high-level task orchestration system that allows SafwanBuddy to decompose complex goals into a sequence of executable actions across multiple subsystems. Instead of issuing individual commands, users can provide a broad goal like "expertly research and report on the new iPhone," and the system will automatically handle web searching, price comparison, document generation, and messaging.
+
+This mode uses a specialized `TaskPlanner` that maps high-level intents to an execution chain on the event bus. It ensures proper sequencing with "wait-for-completion" logic and provides unique visual feedback via the "energy ring" shader to indicate the system is in a deep-processing state. Expert mode represents the peak of autonomous productivity within the SafwanBuddy ecosystem.
 
 ---
 

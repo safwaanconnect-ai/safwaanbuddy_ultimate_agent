@@ -1,5 +1,6 @@
 # UI requirements
 PyQt6
+PyQt6-Multimedia
 PyOpenGL
 ModernGL
 Pillow

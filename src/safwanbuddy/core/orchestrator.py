@@ -1,6 +1,7 @@
 from src.safwanbuddy.core.events import event_bus
 from src.safwanbuddy.core.logging import logger
-from src.safwanbuddy.automation import click_system, type_system, workflow_engine, form_filler
+from src.safwanbuddy.automation import click_system, type_system, workflow_engine, form_filler, expert_mode
+from src.safwanbuddy.ui.sound_manager import sound_manager
 from src.safwanbuddy.social.unified_interface import social_integrator
 from src.safwanbuddy.web import browser_controller, search_engine, price_comparison
 from src.safwanbuddy.documents.word_generator import word_generator
@@ -35,6 +36,10 @@ class SafwanBuddyOrchestrator:
         event_bus.subscribe("document_request", self._handle_document)
         event_bus.subscribe("web_request", self._handle_web)
         event_bus.subscribe("system_state", self._handle_state_change)
+        event_bus.subscribe("expert_task_request", self._handle_expert_task)
+
+    def _handle_expert_task(self, goal):
+        expert_mode.expert_mode_engine.plan_and_execute(goal)
 
     def _handle_state_change(self, state):
         logger.info(f"System state: {state}")

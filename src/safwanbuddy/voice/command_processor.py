@@ -22,6 +22,7 @@ class CommandProcessor:
             (r"compare price (?:of )?(.+)", "compare_price"),
             (r"generate (?:a )?report", "generate_report"),
             (r"set language to (.+)", "set_language"),
+            (r"expertly (.*)", "expert_mode"),
         ]
 
     def process_command(self, text: str):
@@ -103,5 +104,7 @@ class CommandProcessor:
             else: code = "en"
             language_manager.set_language(code)
             tts_manager.speak(f"Language set to {lang}")
+        elif action == "expert_mode":
+            event_bus.emit("expert_task_request", args[0])
 
 command_processor = CommandProcessor()

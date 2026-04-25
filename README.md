@@ -1,87 +1,87 @@
-# SafwanBuddy Ultimate++ v7.0 (Production)
+# SafwanBuddy Ultimate++ v7.0 🚀
 
-[![Version](https://img.shields.io/badge/version-7.0%20Ultimate-blue.svg)](https://github.com/your-repo/safwanbuddy)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/your-repo/safwanbuddy/actions)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/Version-7.0.0--Pro-blueviolet.svg)]()
+[![Build Status](https://img.shields.io/badge/Build-Production--Ready-brightgreen.svg)]()
 
-## Human-Digital Symbiosis System
-
-SafwanBuddy Ultimate++ is a state-of-the-art human-digital symbiosis system. It bridges the gap between human intent and digital execution through an immersive, AI-driven interface. Featuring advanced computer vision, offline voice recognition, and autonomous task chaining.
+> **The World's Most Advanced AI Desktop Companion.**
+> Experience the fusion of Deep Intelligence, Autonomous Control, and Cyberpunk Aesthetics.
 
 ---
 
-## 📸 Media Gallery
-
-| **Holographic Command Center** | **Voice Spectrum Visualizer** | **Autonomous Expert Mode** |
-|:---:|:---:|:---:|
-| ![Hologram](https://placehold.co/600x400/00d4ff/ffffff?text=Holographic+UI) | ![Visualizer](https://placehold.co/600x400/00ff88/ffffff?text=Audio+Visualizer) | ![Expert](https://placehold.co/600x400/ff0055/ffffff?text=Expert+Mode) |
-| *Premium GLSL Shaders* | *Real-time Audio Reactivity* | *Complex Task Chaining* |
+## 🌌 The Energy Orb Experience
+SafwanBuddy v7.0 introduces the **Swirling Energy Orb**, a next-gen holographic interface driven by real-time GLSL shaders. Watch as the pink and blue energies dance to your commands, visualizing the AI's cognitive processes.
 
 ---
 
-## 🚀 Key Features
+## 🔥 "Crazy" Feature Highlights
 
-### 🧠 Autonomous Expert Mode
-The pinnacle of SafwanBuddy's automation. Decomposes high-level goals into multi-domain execution chains.
-- **Cross-Domain Workflows:** (Web → Document → Social)
-- **Dynamic Task Decomposition:** Uses regex and keyword weighting to break down complex strings.
-- **State Persistence:** Logs execution history to `config/expert_history.json`.
-- **Unique Visual Aura:** Triggers specialized "Energy Ring" shader effects during execution.
+### 🕹️ Real Controlling (Win32 Elite)
+Full system-level dominance. SafwanBuddy doesn't just "talk"; it *executes*.
+- **Deep Process Management**: Kill unresponsive apps, optimize memory, and manage background threads.
+- **Hardware Mastery**: Direct control over volume, brightness, and power states via Win32 API.
+- **Window Orchestration**: Automatically arrange, minimize, or close windows to optimize your workspace.
 
-### 🌌 Premium AV Experience (SoundManager Pro)
-- **Advanced Shaders:** Fractal noise (FBM), rotation matrices, chromatic aberration, and dynamic scanning lines.
-- **Cross-Fading Audio:** Seamless transitions between ambient background loops (Idle vs. Processing).
-- **Sub-millisecond Latency:** Visuals respond instantly to voice intensity changes.
+### 🧠 Autonomous Expert Mode (Elite AV)
+The AI now thinks five steps ahead. Give it a high-level goal, and watch it navigate your desktop.
+- **Self-Healing Workflows**: If a task fails, Expert Mode re-evaluates and tries alternative paths.
+- **Multi-Chain Reasoning**: Combines web intelligence, document generation, and system operations in a single autonomous sequence.
+- **Desktop Navigation**: Real-world interaction with GUI elements, forms, and applications.
 
-### 🤖 Multilingual Voice AI
-- **Vosk Integration:** Full offline speech-to-text recognition.
-- **Dialect Support:** Specialized support for English, Hindi, and Hyderabadi slang.
-
----
-
-## 🛠 Technical Deep Dive
-
-### Event-Driven Architecture
-SafwanBuddy utilizes a central `event_bus` (Observer Pattern) to decouple subsystems.
-```python
-# Emitting an event
-event_bus.emit("expert_task_request", "research and report about quantum computing")
-```
-
-### Shader Pipeline
-The UI leverages **ModernGL** for high-performance GPU rendering.
-- **Vertex Shaders:** Handle geometry and screen projection.
-- **Fragment Shaders:** Calculate per-pixel colors with complex GLSL math.
+### 🛡️ Elite AV Integration
+Built-in security and optimization suite.
+- **Real-time Threat Monitoring**: Keeps an eye on system health.
+- **Privacy Shield**: Encrypted profile management and secure data handling.
 
 ---
 
-## 📦 Installation & Build
+## 🛠️ Technical Documentation
 
-### Prerequisites
-- **Python 3.9+**
-- **Tesseract OCR:** Required for screen text recognition.
-- **Vosk Models:** Place in `assets/models/`.
+### Architecture
+SafwanBuddy is built on a modular plugin architecture, allowing for infinite extensibility.
 
-### Setup
+- **Core**: Event-driven engine (`src/safwanbuddy/core`)
+- **Automation**: Expert Mode and Desktop Control (`src/safwanbuddy/automation`)
+- **Vision & Voice**: Multimodal perception (`src/safwanbuddy/vision`, `src/safwanbuddy/voice`)
+- **Utils**: Low-level Win32 hooks (`src/safwanbuddy/utils/win_utils.py`)
+
+### Requirements
+- Python 3.9+
+- Windows 10/11 (for Win32 features)
+- GPU with OpenGL 3.3+ support (for Shaders)
+
+### Installation
 ```bash
-git clone https://github.com/your-repo/safwanbuddy.git
-cd safwanbuddy
+git clone https://github.com/safwan/safwanbuddy-ultimate.git
+cd safwanbuddy-ultimate
 pip install -r requirements.txt
 python main.py
 ```
 
-### Build Production EXE
-To generate a standalone executable:
+### Building the Executable
 ```bash
 python build_exe.py
 ```
-*The output will be in the `dist/SafwanBuddy` directory.*
 
 ---
 
-## 📄 License
-Distributed under the MIT License. See `LICENSE` for more information.
+## 🖼️ Gallery & UI
 
-**Author:** Safwan & The AI Team  
-**Contact:** dev@safwanbuddy.ai
+| Interface Component | Description |
+| :--- | :--- |
+| **Energy Orb** | Swirling pink/blue energy shader visualizing AI state. |
+| **Command Center** | Centralized HUD for system operations and logs. |
+| **Expert Console** | Real-time breakdown of autonomous task execution. |
+
+---
+
+## 🤝 Contributing
+Join the elite. Contributions to the core engine and official plugins are welcome.
+
+---
+
+## 📜 License
+SafwanBuddy Ultimate++ is licensed under the MIT License. See `LICENSE` for details.
+
+---
+*Created with ❤️ by Safwan and the Global AI Community.*

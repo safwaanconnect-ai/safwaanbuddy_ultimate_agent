@@ -1,29 +1,47 @@
 #version 330
 uniform float time;
+uniform vec2 resolution;
+uniform float audio_intensity;
 out vec4 f_color;
 
+float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453123);
+}
+
 void main() {
-    vec2 uv = gl_FragCoord.xy / vec2(1000.0, 700.0);
+    vec2 uv = gl_FragCoord.xy / resolution;
+    vec2 p = uv - 0.5;
+    p.x *= resolution.x / resolution.y;
     
-    // Wave effect
-    float wave = sin(uv.x * 10.0 + time) * 0.1;
-    uv.y += wave;
+    // Dynamic perspective distortion
+    float z = 1.0 / (p.y + 1.5);
+    vec2 grid_uv = vec2(p.x * z, z + time * 0.5);
     
-    // Grid pattern
-    float grid_x = smoothstep(0.95, 1.0, abs(sin(uv.x * 40.0)));
-    float grid_y = smoothstep(0.95, 1.0, abs(sin(uv.y * 40.0)));
-    float grid = max(grid_x, grid_y);
+    // Grid lines with audio reactivity
+    float thickness = 0.02 + 0.03 * audio_intensity;
+    float gx = smoothstep(1.0 - thickness, 1.0, abs(sin(grid_uv.x * 20.0)));
+    float gy = smoothstep(1.0 - thickness, 1.0, abs(sin(grid_uv.y * 20.0)));
+    float grid = max(gx, gy);
     
-    // Moving particles (scanline effect)
-    float scanline = sin(uv.y * 100.0 - time * 5.0) * 0.1 + 0.1;
+    // Pulse effect
+    float pulse = sin(time * 2.0) * 0.5 + 0.5;
+    vec3 color = mix(vec3(0.0, 0.2, 0.4), vec3(0.0, 0.8, 1.0), grid);
+    color += vec3(0.0, 0.4, 0.6) * grid * (pulse + audio_intensity);
     
-    vec3 color = vec3(0.0, 0.6, 0.8) * grid; // Neon blue grid
-    color += vec3(0.0, 0.1, 0.3); // Deep blue background
-    color += vec3(0.0, 0.3, 0.5) * scanline; // Moving scanlines
+    // Horizon glow
+    float glow = exp(-abs(p.y + 0.1) * 5.0);
+    color += vec3(0.0, 0.5, 0.8) * glow * (1.0 + audio_intensity);
+    
+    // Scanline
+    float scan = sin(uv.y * 200.0 - time * 10.0) * 0.05;
+    color += scan;
+    
+    // Noise/Film Grain
+    color += (hash(uv + time) - 0.5) * 0.05;
     
     // Vignette
-    float vignette = 1.0 - length(uv - 0.5) * 1.5;
-    color *= vignette;
+    float vig = 1.0 - length(p) * 1.2;
+    color *= vig;
     
-    f_color = vec4(color, 0.8);
+    f_color = vec4(color, 0.7 * vig);
 }

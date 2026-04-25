@@ -14,7 +14,9 @@ def run_test():
         "src.safwanbuddy.core.orchestrator",
         "src.safwanbuddy.voice.speech_recognition",
         "src.safwanbuddy.ui.holographic_ui",
+        "src.safwanbuddy.ui.sound_manager",
         "src.safwanbuddy.automation.click_system",
+        "src.safwanbuddy.automation.expert_mode",
         "src.safwanbuddy.web.browser_controller"
     ]
     
@@ -28,6 +30,9 @@ def run_test():
     paths = [
         "assets/shaders/hologram.frag",
         "assets/shaders/particles.frag",
+        "assets/shaders/energy_ring.frag",
+        "assets/sounds/startup.wav",
+        "assets/sounds/success.wav",
         "assets/models/vosk-model-small-en-us-0.15"
     ]
     

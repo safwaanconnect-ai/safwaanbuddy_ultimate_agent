@@ -5,7 +5,7 @@ uniform float audio_intensity;
 out vec4 f_color;
 
 float hash(vec2 p) {
-    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
 float noise(vec2 p) {
@@ -23,23 +23,28 @@ void main() {
     vec2 uv = gl_FragCoord.xy / resolution;
     vec2 centered_uv = uv - 0.5;
     
+    // Chromatic Aberration
+    float shift = 0.01 * audio_intensity;
+    float r_noise = noise(uv + vec2(shift, 0.0) + time * 0.1);
+    float b_noise = noise(uv - vec2(shift, 0.0) + time * 0.1);
+    
     // Distort UVs based on audio and time
     float distortion = noise(uv * 10.0 + time) * 0.02 * audio_intensity;
-    uv += distortion;
+    vec2 distorted_uv = uv + distortion;
     
     // Grid effect
-    vec2 grid_uv = uv * 40.0;
+    vec2 grid_uv = distorted_uv * 40.0;
     float grid = abs(sin(grid_uv.x + time * 0.2)) * abs(sin(grid_uv.y - time * 0.1));
     grid = pow(grid, 0.05);
     
     // Neon glow lines
-    float line = abs(sin(uv.y * 10.0 - time * 2.0));
+    float line = abs(sin(distorted_uv.y * 10.0 - time * 2.0));
     line = smoothstep(0.98, 1.0, line);
     
     // FBM-like noise for holographic feel
     float n = 0.0;
-    n += noise(uv * 5.0 + time * 0.5) * 0.5;
-    n += noise(uv * 10.0 - time * 0.3) * 0.25;
+    n += noise(distorted_uv * 5.0 + time * 0.5) * 0.5;
+    n += noise(distorted_uv * 10.0 - time * 0.3) * 0.25;
     
     // Color scheme: Premium Neon Cyan/Blue
     vec3 base_color = vec3(0.0, 0.8, 1.0);
@@ -47,8 +52,14 @@ void main() {
     color += base_color * line * 0.5;
     color += base_color * n * 0.2;
     
-    // Audio reactivity
-    color *= (1.0 + audio_intensity * 0.5);
+    // Apply chromatic aberration to the final color
+    color.r += r_noise * shift;
+    color.b += b_noise * shift;
+    
+    // Audio reactivity Aura
+    float dist = length(centered_uv);
+    float aura = smoothstep(0.4, 0.0, dist) * audio_intensity;
+    color += base_color * aura * 0.5;
     
     // Scanning line
     float scan = smoothstep(0.99, 1.0, sin(uv.y * 50.0 - time * 5.0));
@@ -59,9 +70,9 @@ void main() {
     color *= vignette;
     
     // Glitch effect
-    if (hash(vec2(time)) > 0.98) {
-        color.r = mix(color.r, hash(uv + time), 0.2);
+    if (hash(vec2(time, time)) > 0.98) {
+        color.rg = mix(color.rg, vec2(hash(uv + time)), 0.2);
     }
     
-    f_color = vec4(color, 0.7 + n * 0.3);
+    f_color = vec4(color, 0.7 + n * 0.3 + aura);
 }

@@ -39,12 +39,18 @@ class FormFiller:
         
         # Search for fields based on profile keys
         for key, value in profile_data.items():
-            # Try searching for the key itself (e.g., "email") or its space-separated version ("full name")
-            search_term = key.replace("_", " ")
-            matches = ocr_engine.find_text(screenshot, search_term)
-            if matches:
+            # Try multiple variants for better detection
+            search_terms = {key, key.replace("_", " "), key.capitalize().replace("_", " ")}
+            
+            all_matches = []
+            for term in search_terms:
+                matches = ocr_engine.find_text(screenshot, term)
+                if matches:
+                    all_matches.extend(matches)
+            
+            if all_matches:
                 # Use the highest confidence match
-                best_match = max(matches, key=lambda m: m[4])
+                best_match = max(all_matches, key=lambda m: m[4])
                 self.pending_fields.append({"label": key, "value": value, "rect": best_match[:4]})
 
         if not self.pending_fields:

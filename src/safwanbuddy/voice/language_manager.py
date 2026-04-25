@@ -17,7 +17,15 @@ class LanguageManager:
             "kaisa": "kaise",
             "khali-pili": "faltu",
             "maku": "mujhe",
-            "taku": "tujhe"
+            "taku": "tujhe",
+            "kama": "kaam",
+            "potta": "ladka",
+            "potti": "ladki",
+            "yaaro": "dost",
+            "mama": "dost",
+            "uustad": "expert",
+            "kirrak": "awesome",
+            "zabardast": "excellent"
         }
 
     def translate_hyderabadi(self, text: str) -> str:

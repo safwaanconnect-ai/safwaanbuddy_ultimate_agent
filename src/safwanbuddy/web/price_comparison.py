@@ -1,34 +1,36 @@
-from src.safwanbuddy.web import browser_controller, web_scraper
+from src.safwanbuddy.web.web_scraper import web_scraper
 from src.safwanbuddy.core import logger, event_bus
+import pandas as pd
 
 class PriceComparison:
     def __init__(self):
-        self.sites = {
-            "amazon": "https://www.amazon.com/s?k=",
-            "ebay": "https://www.ebay.com/sch/i.html?_nkw="
+        self.sources = {
+            "Amazon": "https://www.amazon.in/s?k=",
+            "Flipkart": "https://www.flipkart.com/search?q="
         }
 
     def compare_prices(self, product_name: str):
         logger.info(f"Comparing prices for: {product_name}")
-        event_bus.emit("system_log", f"Price Comparison: {product_name}")
-        
         results = []
-        # Simulate results for demo purposes if scraping fails
-        mock_results = [
-            {"site": "Amazon", "price": "$189.00", "status": "Available"},
-            {"site": "eBay", "price": "$175.50", "status": "Used"},
-            {"site": "Walmart", "price": "$190.00", "status": "Available"}
-        ]
         
-        for site, url in self.sites.items():
-            full_url = f"{url}{product_name.replace(' ', '+')}"
+        for site, base_url in self.sources.items():
+            url = f"{base_url}{product_name.replace(' ', '+')}"
             logger.info(f"Checking {site}...")
-            # We would normally do: soup = web_scraper.scrape_url(full_url)
-            # and then parse it.
+            # In a real scenario, we'd need more sophisticated scraping or APIs
+            # Mocking results for demonstration if scraping fails
+            results.append({
+                "Site": site,
+                "Product": product_name,
+                "Price": "Check Website",
+                "Link": url
+            })
             
-        results = mock_results
-        event_bus.emit("notification", f"Found {len(results)} price matches for {product_name}")
-        event_bus.emit("price_results", results)
+        df = pd.DataFrame(results)
+        event_bus.emit("system_log", f"Price comparison complete for {product_name}")
+        # Could save to Excel
+        from src.safwanbuddy.documents.excel_generator import excel_generator
+        excel_generator.create_spreadsheet([df.columns.tolist()] + df.values.tolist(), f"price_compare_{product_name.replace(' ', '_')}.xlsx")
+        
         return results
 
 price_comparison = PriceComparison()

@@ -8,7 +8,17 @@ class ProfileManager:
         self.data_dir = data_dir
         if not os.path.exists(data_dir):
             os.makedirs(data_dir)
+        self.active_profile_id = "personal"
         self._ensure_default_profiles()
+
+    def get_profile(self, profile_id: str):
+        return self.load_profile(profile_id)
+
+    def set_active_profile(self, profile_id: str):
+        if profile_id in self.list_profiles():
+            self.active_profile_id = profile_id
+            return True
+        return False
 
     def _ensure_default_profiles(self):
         if not self.list_profiles():

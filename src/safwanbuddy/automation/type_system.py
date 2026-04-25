@@ -16,12 +16,12 @@ class TypeSystem:
             pyautogui.write(text)
 
     def type_profile_info(self, field: str):
-        profile_id = config_manager.active_profile or "default"
-        profile = profile_manager.load_profile(profile_id)
+        profile_id = profile_manager.active_profile_id
+        profile = profile_manager.get_profile(profile_id)
         if field in profile:
             self.type_text(str(profile[field]))
         else:
-            # Fallback to general settings or some default
+            # Fallback
             pass
 
     def hotkey(self, *args):

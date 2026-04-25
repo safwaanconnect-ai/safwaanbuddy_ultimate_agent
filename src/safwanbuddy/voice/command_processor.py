@@ -27,28 +27,33 @@ class CommandProcessor:
 
     def process_command(self, text: str):
         text = text.lower().strip()
-        # Handle Hyderabadi translation
-        text = language_manager.translate_hyderabadi(text)
         
-        logger.info(f"Processing command: {text}")
+        # Handle dialect normalization and intent detection
+        intent, normalized = language_manager.process_speech(text)
+        if intent != "unknown":
+            logger.info(f"Detected intent {intent} from normalized text: {normalized}")
+            self._dispatch(intent, [])
+            return
+
+        logger.info(f"Processing command: {normalized}")
         
         if not self.is_active:
-            if self.wake_word in text:
+            if self.wake_word in normalized:
                 self.is_active = True
                 event_bus.emit("system_state", "listening")
-                tts_manager.speak("Yes, I am listening.")
-                remaining = text.split(self.wake_word)[-1].strip()
+                tts_manager.speak(language_manager.get_response_greeting())
+                remaining = normalized.split(self.wake_word)[-1].strip()
                 if remaining:
                     self.execute_action(remaining)
             return
 
-        if any(word in text for word in ["stop listening", "goodbye", "exit", "quit"]):
+        if any(word in normalized for word in ["stop listening", "goodbye", "exit", "quit", "khuda hafiz"]):
             self.is_active = False
             event_bus.emit("system_state", "idle")
             tts_manager.speak("Goodbye!")
             return
 
-        self.execute_action(text)
+        self.execute_action(normalized)
 
     def execute_action(self, command: str):
         event_bus.emit("system_state", "processing")
@@ -105,6 +110,13 @@ class CommandProcessor:
             language_manager.set_language(code)
             tts_manager.speak(f"Language set to {lang}")
         elif action == "expert_mode":
-            event_bus.emit("expert_task_request", args[0])
+            event_bus.emit("expert_task_request", args[0] if args else "general task")
+        elif action == "shutdown":
+            self.is_active = False
+            event_bus.emit("system_state", "idle")
+            tts_manager.speak("Khuda Hafiz! System shutting down.")
+        elif action == "status_check":
+            event_bus.emit("system_control", {"action": "get_stats"})
+            tts_manager.speak("Checking system status for you.")
 
 command_processor = CommandProcessor()

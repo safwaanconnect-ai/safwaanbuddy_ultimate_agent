@@ -1,3 +1,5 @@
+from src.safwanbuddy.profiles.language_mapper import language_mapper
+
 class LanguageManager:
     def __init__(self):
         self.supported_languages = {
@@ -6,43 +8,21 @@ class LanguageManager:
             "hyderabadi": "Hyderabadi"
         }
         self.current_language = "en"
-        self.hyderabadi_mappings = {
-            "kaiku": "kyun",
-            "hallu": "dheere",
-            "nakko": "nahin",
-            "hau": "haan",
-            "baigan": "bakwas",
-            "pote": "bachche",
-            "ich": "hi",
-            "kaisa": "kaise",
-            "khali-pili": "faltu",
-            "maku": "mujhe",
-            "taku": "tujhe",
-            "kama": "kaam",
-            "potta": "ladka",
-            "potti": "ladki",
-            "yaaro": "dost",
-            "mama": "dost",
-            "uustad": "expert",
-            "kirrak": "awesome",
-            "zabardast": "excellent"
-        }
 
-    def translate_hyderabadi(self, text: str) -> str:
-        if self.current_language != "hyderabadi":
-            return text
-        
-        words = text.split()
-        translated_words = [self.hyderabadi_mappings.get(word.lower(), word) for word in words]
-        return " ".join(translated_words)
+    def process_speech(self, text: str):
+        """Processes recognized speech according to current language and dialect."""
+        if self.current_language in ["hyderabadi", "hi"]:
+            intent, normalized = language_mapper.normalize_input(text)
+            return intent, normalized
+        return "unknown", text
+
+    def get_response_greeting(self):
+        return language_mapper.get_greeting(self.current_language)
 
     def set_language(self, lang_code: str):
         if lang_code in self.supported_languages:
             self.current_language = lang_code
             return True
         return False
-
-    def get_current_language(self):
-        return self.current_language
 
 language_manager = LanguageManager()

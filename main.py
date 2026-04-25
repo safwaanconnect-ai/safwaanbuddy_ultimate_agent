@@ -31,6 +31,7 @@ def run_test():
         "assets/shaders/hologram.frag",
         "assets/shaders/particles.frag",
         "assets/shaders/energy_ring.frag",
+        "assets/shaders/energy_orb.frag",
         "assets/sounds/startup.wav",
         "assets/sounds/success.wav",
         "assets/models/vosk-model-small-en-us-0.15"

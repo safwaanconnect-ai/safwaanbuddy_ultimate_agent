@@ -2,6 +2,7 @@ from src.safwanbuddy.core.events import event_bus
 from src.safwanbuddy.core.logging import logger
 from src.safwanbuddy.automation import click_system, type_system, workflow_engine, form_filler, expert_mode
 from src.safwanbuddy.ui.sound_manager import sound_manager
+from src.safwanbuddy.voice import command_processor
 from src.safwanbuddy.social.unified_interface import social_integrator
 from src.safwanbuddy.web import browser_controller, search_engine, price_comparison
 from src.safwanbuddy.documents.word_generator import word_generator

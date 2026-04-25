@@ -42,14 +42,26 @@ class VoiceVisualizer(QWidget):
         height = self.height()
         bar_width = width / len(self.bars)
         
-        color = QColor(0, 255, 255) # Default Cyan
+        base_color = QColor(0, 212, 255) # Cyan
         if self.state == "listening":
-            color = QColor(0, 255, 0) # Green
+            base_color = QColor(0, 255, 136) # Neon Green
         elif self.state == "processing":
-            color = QColor(255, 255, 0) # Yellow
+            base_color = QColor(255, 0, 85) # Vivid Pink
         elif self.state == "error":
-            color = QColor(255, 0, 0) # Red
+            base_color = QColor(255, 30, 0) # Red
             
         for i, val in enumerate(self.bars):
             bar_height = (val / 100) * height
-            painter.fillRect(int(i * bar_width), int((height - bar_height) / 2), int(bar_width - 1), int(bar_height), color)
+            x = int(i * bar_width)
+            y = int((height - bar_height) / 2)
+            
+            # Create a gradient for each bar
+            from PyQt6.QtGui import QLinearGradient
+            gradient = QLinearGradient(0, y, 0, y + bar_height)
+            gradient.setColorAt(0.0, base_color.lighter(150))
+            gradient.setColorAt(0.5, base_color)
+            gradient.setColorAt(1.0, base_color.darker(150))
+            
+            painter.setBrush(gradient)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.drawRoundedRect(x, y, int(bar_width - 2), int(bar_height), 2, 2)

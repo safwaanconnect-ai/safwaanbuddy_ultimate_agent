@@ -34,47 +34,64 @@ class TaskPlanner:
     def _decompose_goal(self, goal: str):
         goal = goal.lower()
         
-        # Advanced keyword weighting and regex-based decomposition
-        # Pattern: research and broadcast/report/message about [topic]
+        # 1. Advanced Research & Intelligence Chain
         match = re.search(r"research (?:and|then) (?:report|broadcast|message) (?:about|on) (.+)", goal)
         if match:
             topic = match.group(1).strip()
             return [
+                {"type": "expert_event", "data": {"status": f"Initializing intelligence gathering on: {topic}"}},
                 {"type": "web_request", "data": {"action": "search", "query": topic}},
-                {"type": "expert_event", "data": {"status": "Researching topic..."}},
-                {"type": "wait", "data": 4},
-                {"type": "document_request", "data": {"action": "generate_summary", "topic": topic}},
-                {"type": "expert_event", "data": {"status": "Generating summary..."}},
+                {"type": "wait", "data": 2},
+                {"type": "expert_event", "data": {"status": "Analyzing search results and extracting key data..."}},
+                {"type": "web_request", "data": {"action": "compare_price", "product": topic}}, # If applicable
                 {"type": "wait", "data": 3},
-                {"type": "social_request", "data": {"action": "broadcast", "content": f"New research on {topic} is ready."}}
+                {"type": "document_request", "data": {"action": "generate_report", "topic": topic}},
+                {"type": "expert_event", "data": {"status": "Synthesizing executive summary..."}},
+                {"type": "social_request", "data": {"action": "message", "name": "Admin", "message": f"Intelligence report on {topic} is complete and archived."}},
+                {"type": "notification", "data": f"Expert Mode: Mission Accomplished for {topic}"}
             ]
 
-        # Pattern: setup profile [name]
+        # 2. Automated Profile & Onboarding Chain
         match = re.search(r"setup profile (.+)", goal)
         if match:
             name = match.group(1).strip()
             return [
+                {"type": "expert_event", "data": {"status": f"Starting automated onboarding for {name}"}},
                 {"type": "automation_request", "data": {"action": "open_browser"}},
-                {"type": "expert_event", "data": {"status": f"Setting up profile for {name}"}},
-                {"type": "automation_request", "data": {"action": "type", "text": name}},
-                {"type": "wait", "data": 2}
+                {"type": "wait", "data": 1},
+                {"type": "automation_request", "data": {"action": "type_profile", "field": "full_name"}},
+                {"type": "automation_request", "data": {"action": "fill_form"}},
+                {"type": "expert_event", "data": {"status": "Verifying identity across systems..."}},
+                {"type": "wait", "data": 2},
+                {"type": "notification", "data": f"Profile {name} is now active."}
             ]
 
-        # Multi-domain chain: web -> doc -> social
-        if "market research" in goal:
+        # 3. Market Intelligence & Social Broadcast Chain
+        if "market research" in goal or "trends" in goal:
             return [
-                {"type": "web_request", "data": {"action": "market_analysis"}},
-                {"type": "expert_event", "data": {"status": "Analyzing market trends"}},
-                {"type": "wait", "data": 5},
-                {"type": "document_request", "data": {"action": "create_excel", "name": "Market_Data"}},
-                {"type": "social_request", "data": {"action": "post", "platform": "twitter", "text": "Market analysis completed."}}
+                {"type": "expert_event", "data": {"status": "Scanning global markets..."}},
+                {"type": "web_request", "data": {"action": "search", "query": "latest AI and tech trends"}},
+                {"type": "wait", "data": 3},
+                {"type": "document_request", "data": {"action": "generate_report"}},
+                {"type": "social_request", "data": {"action": "message", "name": "Broadcast", "message": "Market analysis complete. Trend reports generated."}},
+                {"type": "expert_event", "data": {"status": "Archiving market data..."}}
             ]
 
-        # Fallback split
+        # 4. Multi-step Web & Doc Chain
+        if "analyze" in goal and "save" in goal:
+            return [
+                {"type": "web_request", "data": {"action": "search", "query": goal.replace("analyze", "").replace("save", "")}},
+                {"type": "wait", "data": 4},
+                {"type": "document_request", "data": {"action": "generate_report"}},
+                {"type": "expert_event", "data": {"status": "Analysis saved to local storage."}}
+            ]
+
+        # 5. Dynamic Fallback Chain for 'and' / 'then'
         if " and " in goal or " then " in goal:
             parts = re.split(r" and | then ", goal)
             steps = []
             for part in parts:
+                steps.append({"type": "expert_event", "data": {"status": f"Executing sub-task: {part.strip()}"}})
                 steps.append({"type": "voice_command", "data": part.strip()})
                 steps.append({"type": "wait", "data": 2})
             return steps

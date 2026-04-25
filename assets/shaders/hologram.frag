@@ -1,66 +1,47 @@
-#version 330
+#ifdef GL_ES
+precision mediump float;
+#endif
+
 uniform float time;
 uniform vec2 resolution;
-uniform float audio_intensity;
-out vec4 f_color;
 
-float hash(vec2 p) {
-    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453123);
-}
-
-float noise(vec2 p) {
-    vec2 i = floor(p);
-    vec2 f = fract(p);
-    float a = hash(i);
-    float b = hash(i + vec2(1.0, 0.0));
-    float c = hash(i + vec2(0.0, 1.0));
-    float d = hash(i + vec2(1.0, 1.0));
-    vec2 u = f * f * (3.0 - 2.0 * f);
-    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-}
+varying vec2 v_texcoord;
 
 void main() {
-    vec2 uv = gl_FragCoord.xy / resolution;
-    vec2 centered_uv = uv - 0.5;
+    vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
     
-    // Enhanced Chromatic Aberration
-    float chrom_offset = 0.005 + 0.02 * audio_intensity;
-    float r = noise(uv + vec2(chrom_offset, 0.0) + time * 0.1);
-    float g = noise(uv + time * 0.1);
-    float b = noise(uv - vec2(chrom_offset, 0.0) + time * 0.1);
+    float d = length(uv);
     
-    // Scanline logic that reacts to audio
-    float scanline = sin(uv.y * 800.0 * (1.0 + audio_intensity * 0.1) + time * 10.0);
-    scanline = smoothstep(0.0, 1.0, scanline);
+    // Swirling effect
+    float angle = atan(uv.y, uv.x) + time * 2.0;
+    float dist = length(uv);
     
-    // Dynamic Grid
-    vec2 grid_uv = (uv - 0.5) * (20.0 + audio_intensity * 10.0);
-    float grid = abs(sin(grid_uv.x)) * abs(sin(grid_uv.y));
-    grid = pow(1.0 - grid, 10.0);
+    vec3 color = vec3(0.0);
     
-    // Holographic flicker
-    float flicker = noise(vec2(time * 10.0, 0.0));
-    flicker = step(0.1, flicker);
+    // Core energy orb
+    float orb = 0.5 / dist;
+    orb *= (1.0 + 0.2 * sin(angle * 5.0 + time * 3.0));
     
-    // Main hologram color
-    vec3 base_color = vec3(0.0, 0.8, 1.0);
-    vec3 color = base_color * (grid * 0.2 + scanline * 0.1 + 0.4);
+    // Pink and Blue layers
+    vec3 pink = vec3(1.0, 0.07, 0.57); // Deep Pink
+    vec3 blue = vec3(0.0, 0.75, 1.0);  // Deep Sky Blue
     
-    // Apply Chromatic Aberration
-    color.r += r * chrom_offset * 10.0;
-    color.b += b * chrom_offset * 10.0;
+    float mixFactor = 0.5 + 0.5 * sin(angle + time);
+    vec3 baseColor = mix(pink, blue, mixFactor);
     
-    // Vignette
-    float vig = 1.0 - length(centered_uv) * 1.2;
-    color *= vig;
+    color = baseColor * orb;
     
-    // Vertical "ghosting" or scanning bars
-    float bar = smoothstep(0.2, 0.0, abs(sin(uv.y * 2.0 + time) - 0.5));
-    color += base_color * bar * 0.1 * audio_intensity;
+    // Add some "swirl" trails
+    for(float i = 1.0; i < 4.0; i++) {
+        uv += vec2(0.2 * sin(time + i * angle), 0.2 * cos(time + i * angle));
+        color += 0.05 * baseColor / length(uv);
+    }
     
-    // Glitch
-    float glitch = step(0.98, hash(vec2(time, 1.0)));
-    color += glitch * vec3(hash(uv + time), hash(uv - time), hash(uv * time)) * 0.2;
-
-    f_color = vec4(color, (0.6 + 0.4 * audio_intensity) * flicker * vig);
+    // Edge glow
+    color += 0.1 * blue / (1.0 - dist);
+    
+    // Transparency based on intensity
+    float alpha = clamp(length(color), 0.0, 0.8);
+    
+    gl_FragColor = vec4(color, alpha);
 }

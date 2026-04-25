@@ -77,6 +77,34 @@ class TaskPlanner:
                 {"type": "expert_event", "data": {"status": "Archiving market data..."}}
             ]
 
+        # 6. Autonomous Desktop & Window Management
+        if "cleanup workspace" in goal or "organize windows" in goal:
+            return [
+                {"type": "expert_event", "data": {"status": "Analyzing desktop clutter..."}},
+                {"type": "automation_request", "data": {"action": "list_windows"}},
+                {"type": "wait", "data": 1},
+                {"type": "expert_event", "data": {"status": "Closing non-essential background windows..."}},
+                {"type": "system_control", "data": {"action": "close_window", "target": "Calculator"}},
+                {"type": "system_control", "data": {"action": "close_window", "target": "Notepad"}},
+                {"type": "expert_event", "data": {"status": "Workspace optimized."}},
+                {"type": "notification", "data": "Desktop Cleanup Complete."}
+            ]
+
+        # 7. System Optimization & Performance Boost
+        if "optimize system" in goal or "boost performance" in goal:
+            return [
+                {"type": "expert_event", "data": {"status": "Initiating deep system scan..."}},
+                {"type": "system_control", "data": {"action": "get_stats"}},
+                {"type": "wait", "data": 2},
+                {"type": "expert_event", "data": {"status": "Clearing temporary caches and optimizing memory..."}},
+                {"type": "automation_request", "data": {"action": "flush_dns"}},
+                {"type": "automation_request", "data": {"action": "clear_temp"}},
+                {"type": "expert_event", "data": {"status": "Adjusting power plan for high performance..."}},
+                {"type": "system_control", "data": {"action": "set_power_plan", "plan": "High Performance"}},
+                {"type": "wait", "data": 2},
+                {"type": "notification", "data": "System Performance Boosted Successfully."}
+            ]
+
         # 4. Multi-step Web & Doc Chain
         if "analyze" in goal and "save" in goal:
             return [

@@ -81,6 +81,19 @@ class SafwanBuddyOrchestrator:
             profile = profile_manager.get_profile(profile_id)
             if profile:
                 form_filler.start_guided_fill(profile)
+        elif action == "list_windows":
+            from src.safwanbuddy.utils.win_utils import WinUtils
+            windows = WinUtils.list_windows()
+            logger.info(f"Found {len(windows)} visible windows.")
+        elif action == "flush_dns":
+            logger.info("Flushing DNS cache...")
+            import os
+            os.system("ipconfig /flushdns")
+        elif action == "clear_temp":
+            logger.info("Clearing temporary files...")
+            import os
+            # Simplified temp cleanup
+            os.system('del /q /f /s %TEMP%\\*')
 
     def _handle_social(self, data):
         action = data.get("action")

@@ -26,19 +26,32 @@ def verify_build():
     print(f"Verification Successful: Build located at {output_path}")
     return True
 
+def check_dependencies():
+    """Checks for required build-time dependencies."""
+    print("Checking dependencies...")
+    required = ['pyinstaller', 'psutil']
+    if os.name == 'nt':
+        required.extend(['pywin32', 'pycaw', 'comtypes', 'wmi'])
+    
+    for lib in required:
+        try:
+            if lib == 'pywin32':
+                import win32api
+            else:
+                __import__(lib)
+        except ImportError:
+            print(f"Missing dependency: {lib}. Installing...")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", lib])
+
 def build():
-    print("Starting production build process for SafwanBuddy...")
+    print("Starting production build process for SafwanBuddy Ultimate++ v7.0...")
     
     # Pre-build cleanup
     clean_build()
     
-    # Ensure pyinstaller is installed
-    try:
-        import PyInstaller
-    except ImportError:
-        print("PyInstaller not found. Installing...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pyinstaller"])
-
+    # Dependency check
+    check_dependencies()
+    
     # Run pyinstaller
     try:
         # Use the spec file for the build

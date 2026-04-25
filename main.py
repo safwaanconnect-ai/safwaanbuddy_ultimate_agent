@@ -7,19 +7,62 @@ from src.safwanbuddy.core import plugin_loader, orchestrator
 
 def run_test():
     logger.info("Running diagnostic suite...")
-    # Add real diagnostic checks here
-    print("Configuration Loading: OK")
-    print("Event Bus Initialization: OK")
-    print("Subsystem Startup: OK")
+    import os
+    import importlib
+    
+    modules = [
+        "src.safwanbuddy.core.orchestrator",
+        "src.safwanbuddy.voice.speech_recognition",
+        "src.safwanbuddy.ui.holographic_ui",
+        "src.safwanbuddy.automation.click_system",
+        "src.safwanbuddy.web.browser_controller"
+    ]
+    
+    for mod in modules:
+        try:
+            importlib.import_module(mod)
+            print(f"Module {mod}: LOADED")
+        except Exception as e:
+            print(f"Module {mod}: FAILED ({e})")
+
+    paths = [
+        "assets/shaders/hologram.frag",
+        "assets/shaders/particles.frag",
+        "assets/models/vosk-model-small-en-us-0.15"
+    ]
+    
+    for path in paths:
+        if os.path.exists(path):
+            print(f"Asset {path}: FOUND")
+        else:
+            print(f"Asset {path}: MISSING")
+
     logger.info("Diagnostics complete.")
 
 def run_demo():
     logger.info("Running demonstration sequence...")
-    # Add demo sequence here
     print("Welcome to SafwanBuddy Demo")
+    from src.safwanbuddy.core.events import event_bus
+    import time
+
     print("1. Initializing UI...")
-    print("2. Testing Voice Recognition...")
-    print("3. Simulating Web Search...")
+    event_bus.emit("system_state", "idle")
+    time.sleep(1)
+    
+    print("2. Simulating Voice Recognition...")
+    event_bus.emit("system_state", "listening")
+    event_bus.emit("audio_level", 0.5)
+    time.sleep(1)
+    event_bus.emit("voice_command", "hey safwan search for top AI trends")
+    
+    print("3. Processing Command...")
+    event_bus.emit("system_state", "processing")
+    time.sleep(1)
+    
+    print("4. Executing Automation...")
+    event_bus.emit("system_log", "Opening browser and searching...")
+    time.sleep(1)
+    
     logger.info("Demo complete.")
 
 def main():

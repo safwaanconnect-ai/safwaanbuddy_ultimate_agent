@@ -17,11 +17,31 @@ class TemplateManager:
             return path
         return None
 
-    def add_template(self, source_path: str):
-        if os.path.exists(source_path):
-            filename = os.path.basename(source_path)
-            dest_path = os.path.join(self.template_dir, filename)
-            shutil.copy(source_path, dest_path)
-            logger.info(f"Template {filename} added.")
+    def fill_template(self, template_name: str, data: dict, output_path: str):
+        """Fills a template with data. Currently supports simple string replacement in text-based files."""
+        template_path = self.get_template_path(template_name)
+        if not template_path:
+            logger.error(f"Template {template_name} not found.")
+            return False
+            
+        try:
+            if template_name.endswith(('.txt', '.html', '.md')):
+                with open(template_path, 'r') as f:
+                    content = f.read()
+                
+                for key, value in data.items():
+                    placeholder = f"{{{{{key}}}}}"
+                    content = content.replace(placeholder, str(value))
+                
+                with open(output_path, 'w') as f:
+                    f.write(content)
+                logger.info(f"Template {template_name} filled and saved to {output_path}")
+                return True
+            else:
+                logger.warning("Template filling currently only supported for text-based files.")
+                return False
+        except Exception as e:
+            logger.error(f"Error filling template {template_name}: {e}")
+            return False
 
 template_manager = TemplateManager()

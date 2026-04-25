@@ -1,6 +1,8 @@
 import json
 import time
 import threading
+import keyboard
+import mouse
 from src.safwanbuddy.core import logger, event_bus
 
 class WorkflowEngine:
@@ -8,22 +10,45 @@ class WorkflowEngine:
         self.workflows = {}
         self.is_recording = False
         self.recorded_steps = []
-        self._recording_thread = None
+        self._last_event_time = 0
 
     def start_recording(self):
         self.is_recording = True
         self.recorded_steps = []
+        self._last_event_time = time.time()
         logger.info("Started recording workflow.")
         event_bus.emit("system_log", "Recording started...")
         
-        # Start recording logic in a separate thread if needed
-        # In a real system, we would use keyboard and mouse hooks here
-        # For demonstration, we'll just set the flag
+        # Start hooks
+        mouse.on_click(self._on_click)
+        keyboard.on_press(self._on_key)
+
+    def _on_click(self):
+        if not self.is_recording:
+            return
+        x, y = mouse.get_position()
+        self.add_step("click", x=x, y=y)
+
+    def _on_key(self, event):
+        if not self.is_recording:
+            return
+        if event.name == 'esc': # Stop recording on Esc
+            event_bus.emit("automation_request", {"action": "stop_recording"})
+            return
+        self.add_step("key", key=event.name)
 
     def stop_recording(self, name: str):
         if not self.is_recording:
             return []
         self.is_recording = False
+        
+        # Stop hooks
+        try:
+            mouse.unhook_all()
+            keyboard.unhook_all()
+        except:
+            pass
+            
         self.workflows[name] = self.recorded_steps
         logger.info(f"Stopped recording workflow: {name}. Recorded {len(self.recorded_steps)} steps.")
         event_bus.emit("system_log", f"Recording stopped. {len(self.recorded_steps)} steps.")
@@ -31,7 +56,15 @@ class WorkflowEngine:
 
     def add_step(self, step_type: str, **kwargs):
         if self.is_recording:
-            step = {"type": step_type, "timestamp": time.time(), **kwargs}
+            now = time.time()
+            delay = now - self._last_event_time
+            self._last_event_time = now
+            
+            step = {
+                "type": step_type, 
+                "delay": delay,
+                **kwargs
+            }
             self.recorded_steps.append(step)
 
     def save_workflow(self, name: str, steps: list, file_path: str):
@@ -49,15 +82,22 @@ class WorkflowEngine:
         from src.safwanbuddy.automation.type_system import type_system
         
         for step in workflow['steps']:
+            time.sleep(step.get("delay", 0.5))
+            
             step_type = step.get("type")
             if step_type == "click":
-                click_system.click_text(step.get("target"))
+                x, y = step.get("x"), step.get("y")
+                if x is not None and y is not None:
+                    import pyautogui
+                    pyautogui.click(x, y)
+                elif step.get("target"):
+                    click_system.click_text(step.get("target"))
+            elif step_type == "key":
+                import pyautogui
+                pyautogui.press(step.get("key"))
             elif step_type == "type":
                 type_system.type_text(step.get("text"))
             elif step_type == "wait":
                 time.sleep(step.get("duration", 1))
-            
-            # Simulate delay between steps
-            time.sleep(0.5)
 
 workflow_engine = WorkflowEngine()

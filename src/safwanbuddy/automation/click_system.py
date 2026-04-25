@@ -3,6 +3,11 @@ from src.safwanbuddy.vision import ocr_engine, screen_capture
 from src.safwanbuddy.core import logger, event_bus
 
 class ClickSystem:
+    def _human_move(self, x, y):
+        """Moves the mouse in a human-like curve."""
+        # Simple implementation of human-like movement
+        pyautogui.moveTo(x, y, duration=0.5, tween=pyautogui.easeInOutQuad)
+
     def click_text(self, text: str, double_click: bool = False):
         screenshot = screen_capture.capture()
         results = ocr_engine.find_text(screenshot, text)
@@ -16,11 +21,12 @@ class ClickSystem:
             center_x = x + w // 2
             center_y = y + h // 2
             
+            self._human_move(center_x, center_y)
+            
             if double_click:
-                pyautogui.doubleClick(center_x, center_y)
+                pyautogui.doubleClick()
             else:
-                pyautogui.click(center_x, center_y)
-            from src.safwanbuddy.core.events import event_bus
+                pyautogui.click()
             event_bus.emit("system_log", f"Clicked: {text}")
             return True
         else:

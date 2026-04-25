@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafwanBuddy Mobile Lite</title>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #00ffcc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #00ffcc;
+            width: 100%;
+            padding-bottom: 10px;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+        }
+        h2 { margin-top: 0; font-size: 1.2rem; }
+        button {
+            background: transparent;
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        button:active {
+            background: #00ffcc;
+            color: #0a0a0a;
+        }
+        input {
+            background: #222;
+            border: 1px solid #444;
+            color: #00ffcc;
+            padding: 10px;
+            width: calc(100% - 22px);
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .status-on { color: #00ff00; }
+        .elite-tag {
+            color: #ff3366;
+            font-size: 0.8rem;
+            float: right;
+            border: 1px solid #ff3366;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        #logs {
+            height: 150px;
+            overflow-y: auto;
+            background: #000;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SAFWANBUDDY <small>LITE</small></h1>
+        <div id="connection-status">Status: <span class="status-on">Connected</span></div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Quick Commands</h2>
+            <button onclick="sendCommand('web_request', {action: 'search', query: 'latest tech news'})">Search Tech News</button>
+            <button onclick="sendCommand('social_request', {action: 'message', name: 'Friend', message: 'Hello from Mobile!'})">Send Hello</button>
+            <button onclick="sendCommand('document_request', {action: 'generate_report', topic: 'Mobile Access'})">Generate Report</button>
+        </div>
+
+        <div class="card">
+            <h2>Elite Features <span class="elite-tag">Windows Only</span></h2>
+            <button disabled style="border-color: #444; color: #444;">System Control</button>
+            <button disabled style="border-color: #444; color: #444;">Window Manager</button>
+            <p style="font-size: 0.8rem; color: #666; text-align: center;">Upgrade to Windows Elite for full control.</p>
+        </div>
+
+        <div class="card">
+            <h2>Custom Action</h2>
+            <input type="text" id="custom-query" placeholder="Type a search query...">
+            <button onclick="sendCustomSearch()">Dispatch Search</button>
+        </div>
+
+        <div class="card">
+            <h2>Console Logs</h2>
+            <div id="logs">
+                <div>[System] Bridge Active.</div>
+                <div>[Auth] Token Verified.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const AUTH_TOKEN = "safwan_buddy_secret_2024";
+
+        async function sendCommand(command, args) {
+            appendLog(`Sending ${command}...`);
+            try {
+                const response = await fetch('/api/command', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Auth-Token': AUTH_TOKEN
+                    },
+                    body: JSON.stringify({ command, args })
+                });
+                const result = await response.json();
+                appendLog(`Result: ${result.message || result.error}`);
+            } catch (e) {
+                appendLog(`Error: ${e.message}`);
+            }
+        }
+
+        function sendCustomSearch() {
+            const query = document.getElementById('custom-query').value;
+            if (query) {
+                sendCommand('web_request', { action: 'search', query });
+            }
+        }
+
+        function appendLog(msg) {
+            const logs = document.getElementById('logs');
+            const div = document.createElement('div');
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logs.appendChild(div);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        // Poll for logs every 5 seconds
+        setInterval(async () => {
+            try {
+                const response = await fetch('/api/logs', {
+                    headers: { 'X-Auth-Token': AUTH_TOKEN }
+                });
+                const data = await response.json();
+                // Just for demo, we don't want to spam the UI
+            } catch (e) {}
+        }, 5000);
+    </script>
+</body>
+</html>

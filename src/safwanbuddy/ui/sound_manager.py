@@ -3,6 +3,7 @@ from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtCore import QUrl, QTimer
 from src.safwanbuddy.core.events import event_bus
 from src.safwanbuddy.core.logging import logger
+from src.safwanbuddy.utils.paths import get_asset_path
 
 class SoundManager:
     def __init__(self):
@@ -34,7 +35,6 @@ class SoundManager:
             "processing": "ambient_hum.wav",
             "idle": "idle_hum.wav"
         }
-        self.assets_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "assets", "sounds")
         self._setup_subscriptions()
         
         # Fading state
@@ -68,7 +68,7 @@ class SoundManager:
 
     def play_fx(self, sound_key):
         if sound_key in self.sounds:
-            file_path = os.path.join(self.assets_path, self.sounds[sound_key])
+            file_path = get_asset_path(os.path.join("sounds", self.sounds[sound_key]))
             if os.path.exists(file_path):
                 self.fx_player.setSource(QUrl.fromLocalFile(file_path))
                 self.fx_player.play()
@@ -79,7 +79,7 @@ class SoundManager:
         if sound_key not in self.sounds:
             return
             
-        file_path = os.path.join(self.assets_path, self.sounds[sound_key])
+        file_path = get_asset_path(os.path.join("sounds", self.sounds[sound_key]))
         if not os.path.exists(file_path):
             logger.warning(f"BG Sound file not found: {file_path}")
             return

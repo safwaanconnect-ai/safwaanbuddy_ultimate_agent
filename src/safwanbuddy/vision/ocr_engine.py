@@ -7,13 +7,29 @@ class OCREngine:
         if tesseract_cmd:
             pytesseract.pytesseract.tesseract_cmd = tesseract_cmd
 
+    def _preprocess(self, image: np.ndarray) -> np.ndarray:
+        """Preprocessing for better OCR results."""
+        if len(image.shape) == 3:
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        else:
+            gray = image
+            
+        # Denoising
+        denoised = cv2.fastNlMeansDenoising(gray, None, 10, 7, 21)
+        
+        # Thresholding
+        _, thresh = cv2.threshold(denoised, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        
+        return thresh
+
     def extract_text(self, image: np.ndarray) -> str:
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        return pytesseract.image_to_string(gray)
+        processed = self._preprocess(image)
+        return pytesseract.image_to_string(processed)
 
     def find_text(self, image: np.ndarray, target_text: str):
+        processed = self._preprocess(image)
         # Using image_to_data for positional information
-        data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
+        data = pytesseract.image_to_data(processed, output_type=pytesseract.Output.DICT)
         
         matches = []
         n_boxes = len(data['text'])

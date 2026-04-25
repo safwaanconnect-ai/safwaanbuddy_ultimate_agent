@@ -10,7 +10,14 @@ class LanguageManager:
             "kaiku": "kyun",
             "hallu": "dheere",
             "nakko": "nahin",
-            "hau": "haan"
+            "hau": "haan",
+            "baigan": "bakwas",
+            "pote": "bachche",
+            "ich": "hi",
+            "kaisa": "kaise",
+            "khali-pili": "faltu",
+            "maku": "mujhe",
+            "taku": "tujhe"
         }
 
     def translate_hyderabadi(self, text: str) -> str:

@@ -28,17 +28,40 @@ class EventBus:
                 pass
 
     def emit(self, event_type: str, data: Any = None):
+        """Emits an event to all subscribers."""
         self._event_count += 1
-        self._history.append({"type": event_type, "data": data, "timestamp": time.time()})
-        if len(self._history) > 1000:
+        event_entry = {
+            "id": self._event_count,
+            "type": event_type,
+            "data": data,
+            "timestamp": time.time()
+        }
+        self._history.append(event_entry)
+        
+        # Keep history limited to prevent memory leak
+        if len(self._history) > 2000:
             self._history.pop(0)
 
         if event_type in self._listeners:
-            for listener in self._listeners[event_type]:
+            # Use a copy of the list to avoid issues if listeners unsubscribe during emission
+            listeners_copy = list(self._listeners[event_type])
+            for listener in listeners_copy:
                 try:
-                    listener(data)
+                    # Check if listener is still valid or if it was removed
+                    if listener in self._listeners[event_type]:
+                        listener(data)
                 except Exception as e:
+                    import traceback
                     print(f"Error in event listener for {event_type}: {e}")
+                    traceback.print_exc()
+
+    def get_history(self, limit: int = 100):
+        """Returns the last N events from history."""
+        return self._history[-limit:]
+
+    def clear_history(self):
+        """Clears the event history."""
+        self._history = []
 
     def get_stats(self):
         return {

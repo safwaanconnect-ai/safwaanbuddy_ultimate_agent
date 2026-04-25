@@ -51,6 +51,13 @@ class CommandProcessor:
             # Example: call Safwan
             name = command.split("call")[-1].strip()
             event_bus.emit("social_request", {"action": "call", "name": name})
+        elif "message" in command or "send to" in command:
+            # Example: send message to Safwan saying hello
+            parts = command.split("saying")
+            header = parts[0]
+            message = parts[1].strip() if len(parts) > 1 else "Hello!"
+            name = header.replace("send message to", "").replace("message", "").replace("send to", "").strip()
+            event_bus.emit("social_request", {"action": "message", "name": name, "message": message})
         elif "record workflow" in command:
             event_bus.emit("automation_request", {"action": "record_workflow"})
         elif "stop recording" in command:

@@ -73,11 +73,21 @@ class ConfigManager:
         with open(self.config_path, 'w') as f:
             yaml.dump(self.settings, f)
 
-    def get_profile(self, profile_id: str = None):
-        # This would load from profiles.yaml
-        return {"id": "default", "name": "Default Profile"}
+    def get_profile(self, profile_id: str = None) -> Dict[str, Any]:
+        """Loads a profile using the ProfileManager."""
+        from src.safwanbuddy.profiles.profile_manager import profile_manager
+        if not profile_id:
+            profile_id = self.active_profile or "personal" # Default to personal
+        return profile_manager.load_profile(profile_id)
+
+    def list_profiles(self):
+        """Lists all available profiles using the ProfileManager."""
+        from src.safwanbuddy.profiles.profile_manager import profile_manager
+        return profile_manager.list_profiles()
 
     def set_active_profile(self, profile_id: str):
         self.active_profile = profile_id
+        self.set_config("app.active_profile", profile_id)
+        self.save_config()
 
 config_manager = ConfigManager()

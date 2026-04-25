@@ -31,6 +31,10 @@ class SafwanBuddyOrchestrator:
         event_bus.subscribe("social_request", self._handle_social)
         event_bus.subscribe("document_request", self._handle_document)
         event_bus.subscribe("web_request", self._handle_web)
+        event_bus.subscribe("system_state", self._handle_state_change)
+
+    def _handle_state_change(self, state):
+        logger.info(f"System state changed to: {state}")
 
     def start(self):
         logger.info("Orchestrator starting subsystems...")
@@ -57,11 +61,10 @@ class SafwanBuddyOrchestrator:
         elif action == "stop_recording":
             workflow_engine.stop_recording("last_recorded")
         elif action == "run_workflow":
-            # This would need a path, but we'll use a mock for now
-            logger.info(f"Running workflow: {data.get('name')}")
+            workflow_engine.run_workflow(data.get("path", "workflow.json"))
         elif action == "fill_form":
-            profile_id = config_manager.active_profile or "default"
-            profile = profile_manager.load_profile(profile_id)
+            profile_id = config_manager.active_profile or "personal"
+            profile = config_manager.get_profile(profile_id)
             if profile:
                 form_filler.start_guided_fill(profile)
             else:
@@ -88,6 +91,10 @@ class SafwanBuddyOrchestrator:
         event_bus.emit("system_log", f"Web: {action}")
         if action == "compare_price":
             price_comparison.compare_prices(data.get("product"))
+
+    def process_command(self, text: str):
+        """Processes a text command as if it were spoken."""
+        event_bus.emit("voice_command", text)
 
     def stop(self):
         logger.info("Orchestrator shutting down...")

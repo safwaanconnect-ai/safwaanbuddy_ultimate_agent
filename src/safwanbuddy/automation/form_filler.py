@@ -35,24 +35,17 @@ class FormFiller:
         
         # Capture screen and find potential fields
         screenshot = screen_capture.capture()
-        # Mock detection: find all text on screen as potential labels
-        data = ocr_engine.find_text(screenshot, "") # Empty string matches everything with confidence
-        
-        # Filter for common form field labels
-        common_labels = ["name", "email", "phone", "address", "city", "country", "zip", "password", "user"]
         self.pending_fields = []
         
-        for x, y, w, h, conf in data:
-            # Simple heuristic: if text matches a common label
-            # We'll just use a few for demonstration
-            # In a real app, this would be much more sophisticated
-            pass
-
-        # For demo purposes, let's assume we found some matches based on profile keys
+        # Search for fields based on profile keys
         for key, value in profile_data.items():
-            matches = ocr_engine.find_text(screenshot, key.replace("_", " "))
+            # Try searching for the key itself (e.g., "email") or its space-separated version ("full name")
+            search_term = key.replace("_", " ")
+            matches = ocr_engine.find_text(screenshot, search_term)
             if matches:
-                self.pending_fields.append({"label": key, "value": value, "rect": matches[0][:4]})
+                # Use the highest confidence match
+                best_match = max(matches, key=lambda m: m[4])
+                self.pending_fields.append({"label": key, "value": value, "rect": best_match[:4]})
 
         if not self.pending_fields:
             logger.warning("No fields detected for guided fill.")

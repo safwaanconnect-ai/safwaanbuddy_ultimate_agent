@@ -38,14 +38,40 @@ class HolographicUI(QOpenGLWidget):
             frag_code = '''
                 #version 330
                 uniform float time;
+                uniform vec2 resolution;
                 out vec4 f_color;
+                
+                float hash(vec2 p) {
+                    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+                }
+                
                 void main() {
-                    vec2 uv = gl_FragCoord.xy / vec2(1000.0, 700.0);
-                    float grid = abs(sin(uv.x * 50.0 + time)) * abs(sin(uv.y * 50.0));
-                    grid = pow(grid, 0.1);
-                    vec3 color = vec3(0.0, 0.8, 1.0) * grid * 0.5;
-                    color += vec3(0.0, 0.2, 0.4);
-                    f_color = vec4(color, 0.6);
+                    vec2 uv = gl_FragCoord.xy / resolution;
+                    vec2 centered_uv = uv - 0.5;
+                    
+                    // Grid effect
+                    float grid = abs(sin(uv.x * 40.0 + time * 0.2)) * abs(sin(uv.y * 40.0 - time * 0.1));
+                    grid = pow(grid, 0.05);
+                    
+                    // Scanning line
+                    float scan = smoothstep(0.98, 1.0, sin(uv.y * 10.0 - time * 2.0));
+                    
+                    // Vignette
+                    float vignette = 1.0 - length(centered_uv) * 1.2;
+                    
+                    // Glitch/Noise
+                    float noise = hash(uv + time) * 0.05;
+                    
+                    vec3 base_color = vec3(0.0, 0.5, 0.8);
+                    vec3 color = base_color * grid * 0.4;
+                    color += base_color * scan * 0.3;
+                    color += noise;
+                    color *= vignette;
+                    
+                    // Inner glow
+                    color += vec3(0.0, 0.1, 0.2) * (1.0 - grid);
+                    
+                    f_color = vec4(color, 0.7);
                 }
             '''
 
@@ -63,6 +89,8 @@ class HolographicUI(QOpenGLWidget):
         self.time += 0.05
         if 'time' in self.prog:
             self.prog['time'].value = self.time
+        if 'resolution' in self.prog:
+            self.prog['resolution'].value = (float(self.width()), float(self.height()))
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
     def resizeGL(self, width, height):

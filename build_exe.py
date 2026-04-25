@@ -18,10 +18,17 @@ def verify_build():
         print("Verification Failed: Output directory not found.")
         return False
     
-    asset_path = os.path.join(output_path, 'assets')
-    if not os.path.exists(asset_path):
-        print("Verification Failed: Assets not bundled.")
-        return False
+    critical_paths = [
+        os.path.join(output_path, 'assets'),
+        os.path.join(output_path, 'config'),
+        os.path.join(output_path, 'plugins'),
+        os.path.join(output_path, 'assets', 'icons', 'app.ico')
+    ]
+
+    for path in critical_paths:
+        if not os.path.exists(path):
+            print(f"Verification Failed: {path} not bundled.")
+            return False
         
     print(f"Verification Successful: Build located at {output_path}")
     return True

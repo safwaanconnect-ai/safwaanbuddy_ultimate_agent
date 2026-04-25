@@ -4,6 +4,7 @@ import moderngl
 import numpy as np
 import os
 from src.safwanbuddy.core import event_bus
+from src.safwanbuddy.utils.paths import get_asset_path
 
 class HolographicUI(QOpenGLWidget):
     def __init__(self, parent=None):
@@ -35,8 +36,8 @@ class HolographicUI(QOpenGLWidget):
         self.audio_intensity = level
 
     def load_shader(self, name):
-        vert_path = f"assets/shaders/grid.vert"
-        frag_path = f"assets/shaders/{name}.frag"
+        vert_path = get_asset_path("shaders/grid.vert")
+        frag_path = get_asset_path(f"shaders/{name}.frag")
         
         if os.path.exists(vert_path) and os.path.exists(frag_path):
             with open(vert_path, 'r') as f:

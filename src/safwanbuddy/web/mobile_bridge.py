@@ -55,9 +55,11 @@ def post_command():
 @app.route('/api/logs', methods=['GET'])
 @token_required
 def get_logs():
-    # In a real scenario, we'd pull from a log buffer
+    logs = []
+    if hasattr(logger, 'memory_handler'):
+        logs = logger.memory_handler.get_logs()
     return jsonify({
-        "logs": ["Bridge connection established.", "Waiting for commands..."]
+        "logs": logs
     })
 
 def start_bridge(host='0.0.0.0', port=5000):

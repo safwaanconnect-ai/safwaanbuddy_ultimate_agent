@@ -57,8 +57,8 @@ class SafwanBuddyOrchestrator:
     def _handle_system_control(self, data):
         if not self._check_tier_access(data, "system_control"):
             return
-        # window_manager.py also handles this, but we've already blocked it here if from mobile
-        pass
+        from src.safwanbuddy.automation.window_manager import handle_system_control
+        handle_system_control(data)
 
     def _handle_expert_task(self, goal_data):
         # expert_task_request usually sends a string or dict

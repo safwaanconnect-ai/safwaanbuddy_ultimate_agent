@@ -25,6 +25,10 @@ def verify_build():
         os.path.join(output_path, 'assets', 'icons', 'app.ico')
     ]
 
+    # Check for the executable itself
+    exe_name = 'SafwanBuddy.exe' if sys.platform == 'win32' else 'SafwanBuddy'
+    critical_paths.append(os.path.join(output_path, exe_name))
+
     for path in critical_paths:
         if not os.path.exists(path):
             print(f"Verification Failed: {path} not bundled.")

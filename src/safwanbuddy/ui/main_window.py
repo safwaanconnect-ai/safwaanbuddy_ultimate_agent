@@ -6,13 +6,14 @@ from src.safwanbuddy.ui.holographic_ui import HolographicUI
 from src.safwanbuddy.ui.voice_visualizer import VoiceVisualizer
 from src.safwanbuddy.ui.overlay_manager import OverlayManager
 from src.safwanbuddy.core import event_bus, logger
+from src.safwanbuddy.utils.paths import get_asset_path
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("SafwanBuddy Ultimate++ v7.0")
         self.resize(1000, 700)
-        icon_path = "assets/icons/app.ico"
+        icon_path = get_asset_path("icons/app.ico")
         if os.path.exists(icon_path):
             self.setWindowIcon(QIcon(icon_path))
         

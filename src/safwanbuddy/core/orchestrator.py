@@ -4,7 +4,7 @@ from src.safwanbuddy.automation import click_system, type_system, workflow_engin
 from src.safwanbuddy.ui.sound_manager import sound_manager
 from src.safwanbuddy.voice import command_processor
 from src.safwanbuddy.social.unified_interface import social_integrator
-from src.safwanbuddy.web import browser_controller, search_engine, price_comparison
+from src.safwanbuddy.web import browser_controller, search_engine, price_comparison, mobile_bridge
 from src.safwanbuddy.documents import word_generator, excel_generator, pdf_generator, powerpoint_generator
 from src.safwanbuddy.core.config import config_manager
 from src.safwanbuddy.profiles.profile_manager import profile_manager
@@ -29,6 +29,10 @@ class SafwanBuddyOrchestrator:
         self._initialized = True
         self.subsystems = {}
         self.voice_recognizer = VoiceRecognizer()
+        
+        # Elite features restricted to Windows build
+        self.ELITE_FEATURES = ["system_control", "window_manager", "expert_task_request"]
+        
         self._setup_event_handlers()
 
     def _setup_event_handlers(self):
@@ -40,26 +44,54 @@ class SafwanBuddyOrchestrator:
         event_bus.subscribe("system_state", self._handle_state_change)
         event_bus.subscribe("expert_task_request", self._handle_expert_task)
 
+    def _check_tier_access(self, data, feature_name):
+        source = data.get("source", "local")
+        if source == "mobile_bridge" and feature_name in self.ELITE_FEATURES:
+            msg = f"Feature '{feature_name}' is exclusive to the SafwanBuddy Windows Elite build."
+            logger.warning(f"Access Denied: {msg}")
+            event_bus.emit("system_log", msg)
+            sound_manager.play_fx("error")
+            return False
+        return True
+
     def _handle_system_control(self, data):
-        # This is already handled in window_manager.py but we can add orchestrator-level logic here
+        if not self._check_tier_access(data, "system_control"):
+            return
+        # window_manager.py also handles this, but we've already blocked it here if from mobile
         pass
 
-    def _handle_expert_task(self, goal):
-        expert_mode_engine.plan_and_execute(goal)
+    def _handle_expert_task(self, goal_data):
+        # expert_task_request usually sends a string or dict
+        data = goal_data if isinstance(goal_data, dict) else {"goal": goal_data}
+        if not self._check_tier_access(data, "expert_task_request"):
+            return
+        expert_mode_engine.plan_and_execute(data.get("goal"))
 
     def _handle_state_change(self, state):
         logger.info(f"System state: {state}")
 
     def start(self):
         logger.info("Orchestrator initializing subsystems...")
+        
         # Start voice recognition in a separate thread
         voice_thread = threading.Thread(target=self.voice_recognizer.start_listening, daemon=True)
         voice_thread.start()
+        
+        # Start Mobile Lite Bridge
+        if config_manager.get("mobile_bridge_enabled", True):
+            mobile_bridge.start_bridge()
+            
         logger.info("Subsystems online.")
         return True
 
     def _handle_automation(self, data):
         action = data.get("action")
+        
+        # Some automation actions are elite
+        if action in ["list_windows", "record_workflow", "run_workflow"]:
+            if not self._check_tier_access(data, "window_manager"):
+                return
+
         logger.info(f"Orchestrator action: {action}")
         
         if action == "open_browser":

@@ -98,5 +98,3 @@ def handle_system_control(data):
         stats = window_manager.get_system_stats()
         event_bus.emit("system_log", f"System Stats: {stats}")
         return stats
-
-event_bus.subscribe("system_control", handle_system_control)
